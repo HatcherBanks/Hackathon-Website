@@ -75,5 +75,9 @@ public class User {
     @JsonIgnoreProperties("Friends")
     private Set<User> Friends;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private Set<Review> reviews;
+
     private User() {}
 }
