@@ -58,6 +58,8 @@ public class User {
     private String phoneNumber; 
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Game> WantToPlay;
