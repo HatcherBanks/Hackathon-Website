@@ -15,14 +15,14 @@ body {
 }
 
 .header-container {
-    background-color: #333;
-    color: #d3d3d3;
+    background-color: #201E43;
+    color: #EEEEEE;
     text-align: center;
 }
 
 .navbar-container {
     display: flex;
-    background-color: #d3d3d3;
+    background-color: #134B70;
     justify-content: center;
     align-items: center;
     height: 40px;
@@ -51,10 +51,11 @@ body {
 }
 
 .link-btns {
-    background-color: #d3d3d3;
-    color: #333;
+    background-color: #134B70;
+    color: #EEEEEE;
     padding: 10px 15px;
     text-decoration: none;
+    width: 100%;
     display: flex;
     border: none;
     cursor: pointer;
@@ -64,13 +65,13 @@ body {
 }
 
 .link-btns:hover {
-    background-color: #333;
-    color: #d3d3d3;
+    background-color: #201E43;
+    color: #EEEEEE;
     text-decoration: none;
 }
 
 .left-column-container {
-    background-color: #e6e6e6;
+    background-color: #EEEEEE;
     margin-right: 0;
     width: 200px;
     height: 100vh;
@@ -88,7 +89,7 @@ body {
 }
 
 .left-link-btns {
-    background-color: #e6e6e6;
+    background-color: #EEEEEE;
     color: #333;
     padding: 10px 15px;
     text-decoration: none;
@@ -103,14 +104,53 @@ body {
 }
 
 .left-link-btns:hover {
-    background-color: #333;
+    background-color: #134B70;
     color: #e6e6e6;
 }
 
 .dashboard-container {
     flex-grow: 1;
-    max-width: 800px;
-    background-color: #d3d3d3;
+    min-width: calc(100% - 200px);
+    background-color: #e6e6e6;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
+.game-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 100%;
+    max-width: 800px;
+    text-align: left;
+    background-color: #f9f9f9;
+    margin: 16px auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.game-image {
+    width: 20%;
+    height: auto;
+    border-radius: 8px;
+    margin: 16px;
+}  
+
+.game-title {
+    font-size: 18px;
+    margin: 0;
+}
+
+.recent-achievement {
+    font-size: 14px;
+    color: #555;
+    margin: 4px 0;
+}
+
+.hours-played {
+    font-size: 14px;
+    color: #555;
+    margin: 4px 0;
+} 
