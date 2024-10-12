@@ -126,4 +126,18 @@ public class UserService {
         user.getCompleted().remove(game);
         return userRepo.save(user);
     }
+
+    public User addFriend(UUID friendId, String email) {
+        User user = userRepo.findUserByEmail(email).get();
+        User friend = userRepo.findUserById(friendId);
+        user.getFriends().add(friend);
+        return userRepo.save(user);
+    }
+
+    public User removeFriend(UUID friendId, String email) {
+        User user = userRepo.findUserByEmail(email).get();
+        User friend = userRepo.findUserById(friendId);
+        user.getFriends().remove(friend);
+        return userRepo.save(user);
+    }
 }
