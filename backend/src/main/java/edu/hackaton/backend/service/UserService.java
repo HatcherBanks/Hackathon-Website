@@ -8,8 +8,10 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.hackaton.backend.model.Game;
 import edu.hackaton.backend.model.Role;
 import edu.hackaton.backend.model.User;
+import edu.hackaton.backend.repo.GameRepo;
 import edu.hackaton.backend.repo.UserRepo;
 import jakarta.transaction.Transactional;
 
@@ -18,6 +20,9 @@ import jakarta.transaction.Transactional;
 public class UserService {
     @Autowired
     UserRepo userRepo;
+
+    @Autowired
+    GameRepo gameRepo;
 
     public List<User> getAllUsers(){
         return userRepo.findAll();
@@ -79,5 +84,46 @@ public class UserService {
         }
         userRepo.deleteById(id);
     }
+
+    public User addToWantToPlay(UUID gameId, String email) {
+        Game game = gameRepo.findById(gameId).get();
+        User user = userRepo.findUserByEmail(email).get();
+        user.getWantToPlay().add(game);
+        return userRepo.save(user);
+    }
     
+    public User removeFromWantToPlay(UUID gameId, String email) {
+        Game game = gameRepo.findById(gameId).get();
+        User user = userRepo.findUserByEmail(email).get();
+        user.getWantToPlay().remove(game);
+        return userRepo.save(user);
+    }
+
+    public User addToCurrentlyPlaying(UUID gameId, String email) {
+        Game game = gameRepo.findById(gameId).get();
+        User user = userRepo.findUserByEmail(email).get();
+        user.getCurentlyPlaying().add(game);
+        return userRepo.save(user);
+    }
+
+    public User removeFromCurrentlyPlaying(UUID gameId, String email) {
+        Game game = gameRepo.findById(gameId).get();
+        User user = userRepo.findUserByEmail(email).get();
+        user.getCurentlyPlaying().remove(game);
+        return userRepo.save(user);
+    }
+
+    public User addToCompleted(UUID gameId, String email) {
+        Game game = gameRepo.findById(gameId).get();
+        User user = userRepo.findUserByEmail(email).get();
+        user.getCompleted().add(game);
+        return userRepo.save(user);
+    }
+
+    public User removeFromCompleted(UUID gameId, String email) {
+        Game game = gameRepo.findById(gameId).get();
+        User user = userRepo.findUserByEmail(email).get(); 
+        user.getCompleted().remove(game);
+        return userRepo.save(user);
+    }
 }
