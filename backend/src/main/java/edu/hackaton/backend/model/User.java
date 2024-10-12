@@ -4,6 +4,7 @@ package edu.hackaton.backend.model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -16,6 +17,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -56,6 +58,15 @@ public class User {
     private String phoneNumber; 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<Game> WantToPlay;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<Game> CurentlyPlaying;
+    
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<Game> Completed;
 
     private User() {}
 }
