@@ -68,7 +68,7 @@ span.psw {
 
 <h3>Login</h3>
 
-<form action="page.html" method="post">
+<form id="LoginForm" method="post">
 <!--send information to the page above-->
 
   <div class="container">
@@ -76,13 +76,13 @@ span.psw {
         <b> Email </b>
     </label>
 
-    <input type="text" placeholder="Enter Email" name="uname" required>
+    <input id="email" type="text" placeholder="Enter Email" name="uname" required>
 
     <label for="psw">
         <b> Password </b>
     </label>
 
-    <input type="password" placeholder="Enter Password" name="psw" required>
+    <input id="password" type="password" placeholder="Enter Password" name="psw" required>
         
     <button type="submit"> Login </button>
     <label>
@@ -96,5 +96,45 @@ span.psw {
   </div>
 </form>
 
+<script>
+  const BASE_URL = 'http://localhost:8080';
+
+  const loginUser = (loginRequest) => {
+      return fetch(BASE_URL + "/auth/login", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(loginRequest),
+      });
+  };
+
+  document.getElementById('LoginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const loginRequest = {
+          email: username,
+          password: password
+      };
+
+      loginUser(loginRequest)
+          .then(response => response.json())
+          .then(data => {
+            if (data.accessToken) {
+              sessionStorage.setItem('authToken', data.accessToken);
+              sessionStorage.setItem('username', data.username);
+              window.location.href = 'index.html'
+            }
+            return data;
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+  });
+
+</script>
 </body>
 </html>

@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.hackaton.backend.model.Review;
 import edu.hackaton.backend.service.ReviewService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/reviews")
 public class ReviewController {
@@ -28,7 +31,7 @@ public class ReviewController {
     }
 
     @PostMapping("addReview/{gameId}")
-    public Review addReview(Review review, @PathVariable("gameId") UUID gameId, Authentication auth) {
+    public Review addReview(@RequestBody Review review, @PathVariable("gameId") UUID gameId, Authentication auth) {
         return reviewService.addReview(review, gameId, auth.getName());
     }
 

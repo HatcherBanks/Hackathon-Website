@@ -34,6 +34,8 @@ public class ReviewService {
     public Review addReview(Review review, UUID gameId, String email) {
         User user = userRepo.findUserByEmail(email).get();
         Game game = gameRepo.findGameById(gameId);
+        review.setUser(user);
+        review.setGame(game);
         user.getReviews().add(review);
         userRepo.save(user);
         game.getReviews().add(review);

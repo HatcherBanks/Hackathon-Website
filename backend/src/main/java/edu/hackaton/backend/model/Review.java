@@ -38,10 +38,12 @@ public class Review {
     private User user;
 
     @NotBlank(message = "review is required")
-    private String review;
+    private String description;
 
+    @NotNull(message = "stars is required")
     @Max(value = 5, message = "stars must be between 0 and 5")
     @Min(value = 0, message = "stars must be between 0 and 5")
-    @NotNull(message = "stars is required")
     private int stars;
+
+    private Review() {}
 }

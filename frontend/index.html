@@ -17,7 +17,7 @@
                 <li><a href="#mygames"><button class="link-btns">My Games</button></a></li>
                 <li><a href="#about"><button class="link-btns">About</button></a></li>
                 <li><a href="UserSignUp.html"><button class="link-btns">Signup</button></a></li>
-                <li><a href="UserlogIn.html"><button class="link-btns">Login</button></a></li>
+                <li><a href="UserlogIn.html"><button id=loginButton class="link-btns">Login</button></a></li>
                 <li style="display: none;"><a href="#account"><button class="link-btns">Account</button></a></li>
             </ul>
         </div>
@@ -59,6 +59,25 @@
     <footer>
         <p>&copy; 2024 Your Company Name. All rights reserved.</p>
     </footer>
+
+<script>
+    const loginButton = document.getElementById('loginButton');
+    const authToken = sessionStorage.getItem('authToken');
+    const username = sessionStorage.getItem('username');
+    
+    if (authToken) {
+        loginButton.innerText = `Logout (${username})`;
+        loginButton.onclick = function() {
+            event.preventDefault();
+            sessionStorage.removeItem('authToken');
+            sessionStorage.removeItem('username');
+            location.reload();
+
+        };
+    } else {
+        loginButton.style.display = 'block';
+    }
+</script>
 
 </body>
 </html>
