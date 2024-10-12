@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -69,6 +70,14 @@ public class User {
     
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Game> Completed;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("Friends")
+    private Set<User> Friends;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private Set<Review> reviews;
 
     private User() {}
 }

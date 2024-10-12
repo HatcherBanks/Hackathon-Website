@@ -67,4 +67,14 @@ public class UserController {
     public User removeGameFromCompleted(@PathVariable UUID gameId, Authentication auth){
         return userService.removeFromCompleted(gameId, auth.getName());
     }
+
+    @PostMapping("/addFriend/{friendId}")
+    public User addFriend(@PathVariable UUID friendId, Authentication auth){
+        return userService.addFriend(friendId, auth.getName());
+    }
+
+    @DeleteMapping("/removeFriend/{friendId}")
+    public User removeFriend(@PathVariable UUID friendId, Authentication auth){
+        return userService.removeFriend(friendId, auth.getName());
+    }
 }
