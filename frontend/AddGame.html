@@ -61,21 +61,25 @@
     </head>
     <body>
         <h3> Add a new game here </h3>
-        <div class = "container">
+        <form id="gameForm" method="post"></form>
+          <div class = "container">
+            <label for="image">Upload Image:</label>
+            <input type="file" id="image" name="image" accept="image/*" required>
+            <br>
             <label>
-                <b> Text </b>
+                <b> Title </b>
             </label>
-            <input type="text" placeholder="Title" required> 
+            <input id="title" type="text" placeholder="Title" required> 
 
             <label>
                 <b> Description </b>
             </label>
-            <input type="text" placeholder="Description" required>
+            <input id="description" type="text" placeholder="Description" required>
 
             <label>
                 <b> Price </b>
             </label>
-            <input type="text" placeholder="Price" required>
+            <input id="price" type="text" placeholder="Price" required>
 
             <label for="Genre"> <label> <b> Genre </b></label> <br> </label>
             <select id="Genre" name="Genre">
@@ -103,10 +107,63 @@
 
             <br>
             <button type="submit"> Submit </button>
-        </div>
+          </div>
+        </form>
 
         <div class="container" style="background-color:#f1f1f1">
-            <a href="index.html"> <button type="button" class="cancelbtn">Cancel</button> </a>
-          </div>
+          <a href="index.html"> <button type="button" class="cancelbtn">Cancel</button> </a>
+        </div>
+
+      <script>
+        const BASE_URL = 'http://localhost:8080';
+        document.getElementById('gameForm').addEventListener('submit', function(event) {
+          event.preventDefault();
+
+          const fileInput = document.getElementById('image');
+          const title = document.getElementById('email').value;
+          const description = document.getElementById('description').value;
+          const price = document.getElementById('price').value;
+          const genre = document.getElementById('Genre').value;
+          const type = document.getElementById('Type').value;
+          const file = fileInput.files[0];
+
+          console.log("enterd handle");
+          console.log(file);
+          if (file) {
+              const reader = new FileReader();
+              reader.onloadend = function() {
+                  const base64Image = reader.result.split(',')[1]; // Getting the base64 part of the data URL
+
+                  const jsonObject = {
+                      image: base64Image,
+                      title: title,
+                      description: description,
+                      price: price,
+                      genre: genre,
+                      type: type
+                  };
+
+                  fetch(BASE_URL + "/game", {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(jsonObject)
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      console.log('Success:', data);
+                      // Handle the response data
+                  })
+                  .catch(error => {
+                      console.error('Error:', error);
+                  });
+              };
+              reader.readAsDataURL(file); // Convert file to base64 string
+          } else {
+              console.error('No file selected.');
+          }
+        });
+      </script>  
     </body>
 </html>
