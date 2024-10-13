@@ -6,11 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Games</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Style adjustments for game sections */
+        .game {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .game img {
+            max-width: 150px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 4px;
+        }
+        .game-details {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            margin-right: 20px;
+        }
+        .title, .description, .price, .genre, .type {
+            margin: 5px 0;
+        }
+    </style>
 </head>
 <body>
 
     <header class="header-container">
-        <h1>Hackathon Website</h1>
+        <h1>GameTrackr</h1>
         <div class="navbar-container">
             <ul class="navbar-links">
                 <li><a href="index.html"><button class="link-btns">Home</button></a></li>
@@ -61,12 +90,12 @@
     
     <script>
         const loginButton = document.getElementById('loginButton');
-        const signupButton = document.getElementById('signupButton')
+        const signupButton = document.getElementById('signupButton');
         const addGame = document.getElementById('AddGame');
         const authToken = sessionStorage.getItem('authToken');
         const username = sessionStorage.getItem('username');
         const role = sessionStorage.getItem('role');
-        
+
         if (authToken) {
             loginButton.innerText = `Logout (${username})`;
             signupButton.style.display = 'none';
@@ -75,7 +104,6 @@
                 sessionStorage.removeItem('authToken');
                 sessionStorage.removeItem('username');
                 location.reload();
-    
             };
             if (role == 'ADMIN') {
                 addGame.style.display = 'block';
@@ -83,6 +111,99 @@
         } else {
             loginButton.style.display = 'block';
         }
+
+        // Base API URL
+        const BASE_URL = 'http://localhost:8080';
+
+        // Fetch and display games for all three categories: Currently Playing, Played, Want to Play
+        const fetchGamesForAllCategories = () => {
+            fetchCurrentlyPlayingGames();
+            fetchPlayedGames();
+            fetchWantToPlayGames();
+        };
+
+        // Fetch Currently Playing games
+        const fetchCurrentlyPlayingGames = () => {
+            fetch(`${BASE_URL}/users/currentlyPlaying`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => displayGames(data, 'currently-playing-container'))
+            .catch(error => console.error('Error fetching currently playing games:', error));
+        };
+
+        // Fetch Played games
+        const fetchPlayedGames = () => {
+            fetch(`${BASE_URL}/users/gamesPlayed`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => displayGames(data, 'played-games-container'))
+            .catch(error => console.error('Error fetching played games:', error));
+        };
+
+        // Fetch Want to Play games
+        const fetchWantToPlayGames = () => {
+            fetch(`${BASE_URL}/users/wantToPlay`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => displayGames(data, 'want-to-play-container'))
+            .catch(error => console.error('Error fetching want to play games:', error));
+        };
+
+        // Display games in the specified container
+        const displayGames = (games, containerId) => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; // Clear the container
+
+            if (games.length === 0) {
+                container.innerHTML = '<p>No games in this list yet.</p>';
+                return;
+            }
+
+            games.forEach(game => {
+                const gameDiv = document.createElement('div');
+                gameDiv.classList.add('game');
+
+                const img = document.createElement('img');
+                img.src = `data:image/jpeg;base64,${game.image}`; // Assuming image is base64 encoded
+                gameDiv.appendChild(img);
+
+                const gameDetails = document.createElement('div');
+                gameDetails.classList.add('game-details');
+
+                const title = document.createElement('div');
+                title.classList.add('title');
+                title.textContent = `Title: ${game.title}`;
+                gameDetails.appendChild(title);
+
+                const description = document.createElement('div');
+                description.classList.add('description');
+                description.textContent = `Description: ${game.description}`;
+                gameDetails.appendChild(description);
+
+                const genre = document.createElement('div');
+                genre.classList.add('genre');
+                genre.textContent = `Genre: ${game.genre}`;
+                gameDetails.appendChild(genre);
+
+                gameDiv.appendChild(gameDetails);
+                container.appendChild(gameDiv);
+            });
+        };
+
+        // Fetch games for all categories on page load
+        fetchGamesForAllCategories();
     </script>
 
 </body>
