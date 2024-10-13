@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.hackaton.backend.model.Gender;
 import edu.hackaton.backend.model.Role;
 import edu.hackaton.backend.model.User;
 import edu.hackaton.backend.security.TokenManager;
@@ -43,7 +44,7 @@ public class AuthorizationController {
         UserInfo user = (UserInfo) auth.getPrincipal();
         String token = tokenManager.generateToken(user);
 
-        return new TokenResponse(token, user.getRole());
+        return new TokenResponse(token, user.getRole(), user.getUsername());
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -57,7 +58,8 @@ public class AuthorizationController {
             .birthDate(userForm.birthDate())
             .userName(userForm.userName())
             .phoneNumber(userForm.phoneNumber())
-            .role(userForm.role()).build();
+            .role(userForm.role())
+            .gender(userForm.gender()).build();
         userService.addUser(user);
     }
 
@@ -73,7 +75,7 @@ public class AuthorizationController {
     
     
     record LoginRequest(String email, String password){}
-    record TokenResponse(String accessToken, Role role){}
+    record TokenResponse(String accessToken, Role role, String username){}
 
-    record UserForm(String firstName, String lastName, String email, String password, LocalDate birthDate, String userName, String phoneNumber, Role role) {}
+    record UserForm(String firstName, String lastName, String email, String password, LocalDate birthDate, String userName, String phoneNumber, Role role, Gender gender) {}
 }

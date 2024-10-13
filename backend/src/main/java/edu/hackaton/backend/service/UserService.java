@@ -3,6 +3,7 @@ package edu.hackaton.backend.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,5 +126,24 @@ public class UserService {
         User user = userRepo.findUserByEmail(email).get(); 
         user.getCompleted().remove(game);
         return userRepo.save(user);
+    }
+
+    public User addFriend(UUID friendId, String email) {
+        User user = userRepo.findUserByEmail(email).get();
+        User friend = userRepo.findUserById(friendId);
+        user.getFriends().add(friend);
+        return userRepo.save(user);
+    }
+
+    public User removeFriend(UUID friendId, String email) {
+        User user = userRepo.findUserByEmail(email).get();
+        User friend = userRepo.findUserById(friendId);
+        user.getFriends().remove(friend);
+        return userRepo.save(user);
+    }
+
+    public Set<User> getFriends(String email) {
+        User user = userRepo.findUserByEmail(email).get();
+        return user.getFriends();
     }
 }

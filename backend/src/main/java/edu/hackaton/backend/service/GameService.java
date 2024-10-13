@@ -31,4 +31,12 @@ public class GameService {
         }
         return gameRepo.save(game);
     }
+
+    public void deleteGame(UUID gameId) {
+        Game game = gameRepo.findGameById(gameId);
+        if (game == null) {
+            throw new ServiceException("game", "Game with given id doesn't exist");
+        }
+        gameRepo.delete(game);
+    }
 }

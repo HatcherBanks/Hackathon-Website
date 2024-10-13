@@ -73,6 +73,7 @@ body {
 .left-column-container {
     background-color: #EEEEEE;
     margin-right: 0;
+    padding-top: 20px;
     width: 200px;
     height: 100vh;
     overflow-y: auto;
@@ -154,3 +155,39 @@ body {
     color: #555;
     margin: 4px 0;
 } 
+
+.about {
+    max-width: 1000px;
+    align-items: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    justify-content: center;
+}
+
+#about-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#about-desc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+
+#about-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    height: 25vh;
+}
+
+#creator-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

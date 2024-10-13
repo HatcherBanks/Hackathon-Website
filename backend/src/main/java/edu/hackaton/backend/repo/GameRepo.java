@@ -10,6 +10,7 @@ import edu.hackaton.backend.model.Game;
 import edu.hackaton.backend.model.Genre;
 
 public interface GameRepo extends JpaRepository<Game, UUID> {
+    Game findGameById(UUID id);
     Game findByTitle(String title);
     List<Game> findByGenre(Genre genre);
     List<Game> findByType(Type type);
