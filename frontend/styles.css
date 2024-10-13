@@ -25,7 +25,7 @@ body {
     background-color: #134B70;
     justify-content: center;
     align-items: center;
-    height: 40px;
+    height: 50px;
 }
 
 .navbar-links {
@@ -33,16 +33,21 @@ body {
     padding: 0;
     display: flex;
     text-decoration: none;
-    gap: 60px;
+    align-items: center;
+    gap: 0;
     height: 100%;
+    margin-top: 0;
 }
 
 .navbar-links a {
     text-decoration: none;
+    align-items: center;
 }
 
 .navbar-links li {
-    display: inline;
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
 
 .container {
@@ -53,15 +58,18 @@ body {
 .link-btns {
     background-color: #134B70;
     color: #EEEEEE;
-    padding: 10px 15px;
     text-decoration: none;
     width: 100%;
-    display: flex;
+    padding: 12px 20px;
     border: none;
     cursor: pointer;
+    justify-content: center;
     align-items: center;
+    margin-top: 0;
     font-size: 14px;
-    height: 100%;
+    display: flex;
+    height: 50px;
+    border-radius: 0;
 }
 
 .link-btns:hover {
