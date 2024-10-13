@@ -29,12 +29,10 @@ const getAllGames = () => {
         ));
 
         console.log(games);
-        // Handle the list of Game objects
     })
     .catch(error => {
         console.error('Error:', error);
     });
 };
 
-// Call the function to get all games
 getAllGames();
