@@ -2,6 +2,7 @@ package edu.hackaton.backend.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,11 @@ public class UserController {
     @DeleteMapping("/removeGameFromCompleted/{gameId}")
     public User removeGameFromCompleted(@PathVariable UUID gameId, Authentication auth){
         return userService.removeFromCompleted(gameId, auth.getName());
+    }
+
+    @GetMapping("/getFriends")
+    public Set<User> getFriends(Authentication auth){
+        return userService.getFriends(auth.getName());
     }
 
     @PostMapping("/addFriend/{friendId}")
