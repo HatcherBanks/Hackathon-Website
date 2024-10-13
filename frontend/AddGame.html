@@ -155,6 +155,7 @@
 
     <script>
         const BASE_URL = 'http://localhost:8080';
+        const token = sessionStorage.getItem('authToken');
 
         document.getElementById('gameForm').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -167,17 +168,14 @@
             const type = document.getElementById('type').value;
             const file = fileInput.files[0];
 
-            console.log("Entered handle");
-            console.log(file);
-
             if (file) {
                 const reader = new FileReader();
                 reader.onloadend = function() {
                     const base64Image = reader.result.split(',')[1]; // Getting the base64 part of the data URL
 
                     const jsonObject = {
-                        image: base64Image,
                         title: title,
+                        image: base64Image,
                         description: description,
                         price: price,
                         genre: genre,
@@ -188,6 +186,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
                         },
                         body: JSON.stringify(jsonObject)
                     })
