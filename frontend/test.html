@@ -40,7 +40,7 @@
         };
 
         const deleteGame = (gameId) => {
-            fetch(`${BASE_URL}/game/${gameId}`, {
+            fetch(`${BASE_URL}/game/delete/${gameId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
