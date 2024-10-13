@@ -124,6 +124,44 @@
             });
         };
 
+        const currentlyplaying = (gameId) => {
+            fetch(`${BASE_URL}/users/addGameToCurentlyPlaying/${gameId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                } else {
+                    alert('Game added to Want to Play list');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+
+        const alreadyPlayed = (gameId) => {
+            fetch(`${BASE_URL}/users/addGameToCompleted/${gameId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                } else {
+                    alert('Game added to Want to Play list');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+
         const deleteGame = (gameId) => {
             fetch(`${BASE_URL}/game/delete/${gameId}`, {
                 method: 'DELETE',
@@ -195,11 +233,13 @@
                 const currentlyPlayingBtn = document.createElement('button');
                 currentlyPlayingBtn.classList.add('action-btn');
                 currentlyPlayingBtn.textContent = 'Currently Playing';
+                currentlyPlayingBtn.onclick = () => currentlyplaying(game.id);
                 buttonsContainer.appendChild(currentlyPlayingBtn);
 
                 const alreadyPlayedBtn = document.createElement('button');
                 alreadyPlayedBtn.classList.add('action-btn');
                 alreadyPlayedBtn.textContent = 'Already Played';
+                alreadyPlayedBtn.onclick = () => alreadyPlayed(game.id);
                 buttonsContainer.appendChild(alreadyPlayedBtn);
 
                 // Add delete button only if the user is an ADMIN
