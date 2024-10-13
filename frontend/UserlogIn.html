@@ -126,6 +126,7 @@ span.psw {
             if (data.accessToken) {
               sessionStorage.setItem('authToken', data.accessToken);
               sessionStorage.setItem('username', data.username);
+              sessionStorage.setItem('role', data.role);
               window.location.href = 'index.html'
             }
             return data;
