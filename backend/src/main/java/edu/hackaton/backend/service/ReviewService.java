@@ -1,6 +1,7 @@
 package edu.hackaton.backend.service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +44,23 @@ public class ReviewService {
         return reviewRepo.save(review);
     }
 
-    public void deleteReview(UUID reviewId) {
+    public void deleteReview(UUID reviewId, String email) {
         Review review = reviewRepo.findReviewById(reviewId);
-        User user = userRepo.findUserByEmail(review.getUser().getEmail()).get();
+        User user = userRepo.findUserByEmail(email).get();
         Game game = gameRepo.findGameById(review.getGame().getId());
+
+        if (!review.getUser().getEmail().equals(email)) {
+            throw new ServiceException("review", "You can't delete a review that you don't own");
+        }
         
         user.getReviews().remove(review);
         userRepo.save(user);
         game.getReviews().remove(review);
         gameRepo.save(game);
         reviewRepo.delete(review);
+    }
+
+    public Set<Review> getReviewsFromGameById(UUID gameId) {
+        return reviewRepo.findReviewsByGameId(gameId);
     }
 }
