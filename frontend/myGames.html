@@ -7,39 +7,51 @@
     <title>All Games</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Style adjustments for game sections */
-        .game {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin: 20px 0;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        /* Add some basic styling for the game cards */
+        .game { 
+            display: flex; 
+            align-items: flex-start; 
+            justify-content: space-between; 
+            margin: 20px 0; 
+            border: 1px solid #ddd; 
+            padding: 10px; 
+            border-radius: 8px; 
+            background-color: #fff; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
         }
-        .game img {
-            max-width: 150px;
-            height: auto;
-            margin-right: 20px;
+        .game img { 
+            max-width: 150px; 
+            height: auto; 
+            margin-right: 20px; 
+            border-radius: 4px; 
+        }
+        .game-details { 
+            display: flex; 
+            flex-direction: column; 
+            flex-grow: 1; 
+            margin-right: 20px; 
+        }
+        .title, .description, .price, .genre, .type { 
+            margin: 5px 0; 
+        }
+        .delete-button {
+            align-self: flex-start;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
             border-radius: 4px;
+            cursor: pointer;
         }
-        .game-details {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            margin-right: 20px;
-        }
-        .title, .description, .price, .genre, .type {
-            margin: 5px 0;
+        .delete-button:hover {
+            background-color: #ff1a1a;
         }
     </style>
 </head>
 <body>
 
     <header class="header-container">
-        <h1>GameTrackr</h1>
+        <h1>Hackathon Website</h1>
         <div class="navbar-container">
             <ul class="navbar-links">
                 <li><a href="index.html"><button class="link-btns">Home</button></a></li>
@@ -62,25 +74,9 @@
                 <li><a href="myGames.html"><button class="left-link-btns" style="background-color: #134B70; color: #EEEEEE;">All Games</button></a></li>
             </ul>
         </div>
-
+        
         <div class="dashboard-container">
-            <!-- Currently Playing Section -->
-            <div class="games-section">
-                <h2>Currently Playing</h2>
-                <div id="currently-playing-container" class="games-section-container"></div>
-            </div>
-
-            <!-- Played Games Section -->
-            <div class="games-section">
-                <h2>Played Games</h2>
-                <div id="played-games-container" class="games-section-container"></div>
-            </div>
-
-            <!-- Want to Play Section -->
-            <div class="games-section">
-                <h2>Want to Play</h2>
-                <div id="want-to-play-container" class="games-section-container"></div>
-            </div>
+            <div id="all-games-container" class="games-section-container"></div>
         </div>
     </div>
 
@@ -95,11 +91,12 @@
         const authToken = sessionStorage.getItem('authToken');
         const username = sessionStorage.getItem('username');
         const role = sessionStorage.getItem('role');
-
+        const allGamesContainer = document.getElementById('all-games-container');
+        
         if (authToken) {
             loginButton.innerText = `Logout (${username})`;
             signupButton.style.display = 'none';
-            loginButton.onclick = function() {
+            loginButton.onclick = function(event) {
                 event.preventDefault();
                 sessionStorage.removeItem('authToken');
                 sessionStorage.removeItem('username');
@@ -112,62 +109,29 @@
             loginButton.style.display = 'block';
         }
 
-        // Base API URL
+        // Fetch all games from the backend
         const BASE_URL = 'http://localhost:8080';
-
-        // Fetch and display games for all three categories: Currently Playing, Played, Want to Play
-        const fetchGamesForAllCategories = () => {
-            fetchCurrentlyPlayingGames();
-            fetchPlayedGames();
-            fetchWantToPlayGames();
-        };
-
-        // Fetch Currently Playing games
-        const fetchCurrentlyPlayingGames = () => {
-            fetch(`${BASE_URL}/users/currentlyPlaying`, {
+        const fetchAllGames = () => {
+            fetch(`${BASE_URL}/users/getAllGames`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
             })
             .then(response => response.json())
-            .then(data => displayGames(data, 'currently-playing-container'))
-            .catch(error => console.error('Error fetching currently playing games:', error));
-        };
-
-        // Fetch Played games
-        const fetchPlayedGames = () => {
-            fetch(`${BASE_URL}/users/gamesPlayed`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${authToken}`
-                }
+            .then(data => {
+                displayAllGames(data);
             })
-            .then(response => response.json())
-            .then(data => displayGames(data, 'played-games-container'))
-            .catch(error => console.error('Error fetching played games:', error));
+            .catch(error => {
+                console.error('Error fetching all games:', error);
+            });
         };
 
-        // Fetch Want to Play games
-        const fetchWantToPlayGames = () => {
-            fetch(`${BASE_URL}/users/wantToPlay`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${authToken}`
-                }
-            })
-            .then(response => response.json())
-            .then(data => displayGames(data, 'want-to-play-container'))
-            .catch(error => console.error('Error fetching want to play games:', error));
-        };
-
-        // Display games in the specified container
-        const displayGames = (games, containerId) => {
-            const container = document.getElementById(containerId);
-            container.innerHTML = ''; // Clear the container
-
+        // Display all games
+        const displayAllGames = (games) => {
+            allGamesContainer.innerHTML = ''; // Clear the container
             if (games.length === 0) {
-                container.innerHTML = '<p>No games in this list yet.</p>';
+                allGamesContainer.innerHTML = '<p>No games available.</p>';
                 return;
             }
 
@@ -197,13 +161,39 @@
                 genre.textContent = `Genre: ${game.genre}`;
                 gameDetails.appendChild(genre);
 
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteGame(game.id);
+
                 gameDiv.appendChild(gameDetails);
-                container.appendChild(gameDiv);
+                gameDiv.appendChild(deleteButton);
+                allGamesContainer.appendChild(gameDiv);
             });
         };
 
-        // Fetch games for all categories on page load
-        fetchGamesForAllCategories();
+        // Delete game from all games list
+        const deleteGame = (gameId) => {
+            fetch(`${BASE_URL}/users/removeGame/${gameId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    fetchAllGames(); // Refresh the list
+                } else {
+                    console.error('Error deleting game:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting game:', error);
+            });
+        };
+
+        // Fetch all games on page load
+        fetchAllGames();
     </script>
 
 </body>

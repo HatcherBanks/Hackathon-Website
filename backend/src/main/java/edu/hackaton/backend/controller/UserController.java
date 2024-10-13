@@ -104,4 +104,9 @@ public class UserController {
     public User removeFriend(@PathVariable UUID friendId, Authentication auth){
         return userService.removeFriend(friendId, auth.getName());
     }
+
+    @GetMapping("/getAllGames")
+    public Set<Game> getAllGames(Authentication auth){
+        return userService.getAllGames(auth.getName());
+    }
 }
