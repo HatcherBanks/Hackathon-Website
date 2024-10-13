@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,11 +30,11 @@ public class Review {
     @Id
     public UUID id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnoreProperties("reviews")
     private Game game;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnoreProperties("reviews")
     private User user;
 
@@ -46,4 +47,8 @@ public class Review {
     private int stars;
 
     private Review() {}
+
+    public void deleteUser() {
+        this.user = null;
+    }
 }

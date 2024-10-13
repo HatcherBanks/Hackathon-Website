@@ -7,11 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.hackaton.backend.model.Game;
+import edu.hackaton.backend.model.Review;
 import edu.hackaton.backend.model.User;
 import edu.hackaton.backend.repo.GameRepo;
+import edu.hackaton.backend.repo.ReviewRepo;
 import edu.hackaton.backend.repo.UserRepo;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @Transactional
 public class GameService {
@@ -20,6 +24,9 @@ public class GameService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ReviewRepo reviewRepo;
 
     public List<Game> getAllGames() {
         return gameRepo.findAll();
@@ -37,6 +44,10 @@ public class GameService {
         if (game == null) {
             throw new ServiceException("game", "Game with given id doesn't exist");
         }
+        game.getReviews().forEach(review -> {
+            review.deleteUser();
+            reviewRepo.delete(review);
+        });
         gameRepo.delete(game);
     }
 }

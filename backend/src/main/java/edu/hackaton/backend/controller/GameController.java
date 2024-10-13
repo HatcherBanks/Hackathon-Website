@@ -27,7 +27,7 @@ public class GameController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @DeleteMapping("/{gameId}")
+    @DeleteMapping("/delete/{gameId}")
     public void deleteGame(@PathVariable UUID gameId) {
         gameService.deleteGame(gameId);
     }
