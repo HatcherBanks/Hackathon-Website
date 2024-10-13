@@ -29,6 +29,11 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @DeleteMapping("/deleteUser")
+    public void deleteUser(Authentication auth) {
+        userService.deleteUser(auth.getName());
+    }
+
     @GetMapping("/getUserByUserName/{userName}")
     public User getUserByUserName(@PathVariable String userName) {
         return userService.getUserByUserName(userName);

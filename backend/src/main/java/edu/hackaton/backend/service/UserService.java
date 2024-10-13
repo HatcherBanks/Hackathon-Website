@@ -78,12 +78,12 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(UUID id){
-        User userToDelete = userRepo.findUserById(id);
+    public void deleteUser(String email){
+        User userToDelete = userRepo.findUserByEmail(email).get();
         if (userToDelete == null){
             throw new ServiceException("User", "User with given ID not found!");
         }
-        userRepo.deleteById(id);
+        userRepo.delete(userToDelete);
     }
 
     public User addToWantToPlay(UUID gameId, String email) {
