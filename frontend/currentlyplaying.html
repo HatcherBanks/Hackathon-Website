@@ -34,6 +34,18 @@
         .title, .description, .price, .genre, .type { 
             margin: 5px 0; 
         }
+        .delete-button {
+            align-self: flex-start;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #ff1a1a;
+        }
     </style>
 </head>
 <body>
@@ -64,9 +76,9 @@
         </div>
         
         <div class="dashboard-container">
-            <h2>Currently Playing Games</h2>
-            <div class="gamescurrent-container" id="game-container">
-                <!-- Currently playing games will be dynamically inserted here -->
+            <h2>Currently Playing</h2>
+            <div class="currentlyplaying-container" id="currently-playing-container">
+                <!-- Currently Playing games will be dynamically inserted here -->
             </div>
         </div>
     </div>
@@ -74,7 +86,7 @@
     <footer>
         <p>&copy; 2024 Your Company Name. All rights reserved.</p>
     </footer>
-    
+
     <script>
         const loginButton = document.getElementById('loginButton');
         const signupButton = document.getElementById('signupButton');
@@ -82,12 +94,12 @@
         const authToken = sessionStorage.getItem('authToken');
         const username = sessionStorage.getItem('username');
         const role = sessionStorage.getItem('role');
-        const gameContainer = document.getElementById('game-container');
+        const currentlyPlayingContainer = document.getElementById('currently-playing-container');
         
         if (authToken) {
             loginButton.innerText = `Logout (${username})`;
             signupButton.style.display = 'none';
-            loginButton.onclick = function() {
+            loginButton.onclick = function(event) {
                 event.preventDefault();
                 sessionStorage.removeItem('authToken');
                 sessionStorage.removeItem('username');
@@ -103,7 +115,7 @@
         // Fetch currently playing games from the backend
         const BASE_URL = 'http://localhost:8080';
         const fetchCurrentlyPlayingGames = () => {
-            fetch(`${BASE_URL}/users/currentlyPlaying`, {
+            fetch(`${BASE_URL}/users/getGamesCurrentlyPlaying`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${authToken}`
@@ -120,9 +132,9 @@
 
         // Display currently playing games
         const displayCurrentlyPlayingGames = (games) => {
-            gameContainer.innerHTML = ''; // Clear the container
+            currentlyPlayingContainer.innerHTML = ''; // Clear the container
             if (games.length === 0) {
-                gameContainer.innerHTML = '<p>No games currently being played.</p>';
+                currentlyPlayingContainer.innerHTML = '<p>No games currently being played.</p>';
                 return;
             }
 
@@ -152,8 +164,34 @@
                 genre.textContent = `Genre: ${game.genre}`;
                 gameDetails.appendChild(genre);
 
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteGame(game.id);
+
                 gameDiv.appendChild(gameDetails);
-                gameContainer.appendChild(gameDiv);
+                gameDiv.appendChild(deleteButton);
+                currentlyPlayingContainer.appendChild(gameDiv);
+            });
+        };
+
+        // Delete game from currently playing list
+        const deleteGame = (gameId) => {
+            fetch(`${BASE_URL}/users/removeGameFromCurrentlyPlaying/${gameId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    fetchCurrentlyPlayingGames(); // Refresh the list
+                } else {
+                    console.error('Error deleting game:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting game:', error);
             });
         };
 
