@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
+    <title>Games Played</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,10 +14,12 @@
         <div class="navbar-container">
             <ul class="navbar-links">
                 <li><a href="index.html"><button class="link-btns">Home</button></a></li>
+                <li><a href="gameCatalog.html"><button class="link-btns">Browse</button></a></li>
                 <li><a href="aboutPg.html"><button class="link-btns">About</button></a></li>
-                <li><a href="UserSignUp.html"><button class="link-btns">Signup</button></a></li>
-                <li><a href="UserSignUp.html"><button class="link-btns">Login</button></a></li>
+                <li><a href="UserSignUp.html"><button class="link-btns" id="signupButton">Signup</button></a></li>
+                <li><a href="UserlogIn.html"><button id=loginButton class="link-btns">Login</button></a></li>
                 <li style="display: none;"><a href="#account"><button class="link-btns">Account</button></a></li>
+                <li><a href="AddGame.html"><button class="link-btns">Admin</button></a></li>
             </ul>
         </div>
     </header>
@@ -26,15 +28,16 @@
         <div class="left-column-container">
             <ul class="left-col-links">
                 <li><a href="currentlyplaying.html"><button class="left-link-btns">Currently Playing</button></a></li>
-                <li><a href="gamesPlayed.html"><button class="left-link-btns">Played</button></a></li>
+                <li><a href="gamesPlayed.html"><button class="left-link-btns" style="background-color: #134B70; color: #EEEEEE;">Played</button></a></li>
                 <li><a href="wantToPlay.html"><button class="left-link-btns">Want to Play</button></a></li>
                 <li><a href="myGames.html"><button class="left-link-btns">All Games</button></a></li>
             </ul>
         </div>
         
         <div class="dashboard-container">
-            
-
+            <div class="gamesplayed-container" id="games-played-container">
+                                
+            </div>
         </div>
     </div>
 
@@ -42,5 +45,26 @@
         <p>&copy; 2024 Your Company Name. All rights reserved.</p>
     </footer>
 
+    <script>
+        const loginButton = document.getElementById('loginButton');
+        const signupButton = document.getElementById('signupButton')
+        const authToken = sessionStorage.getItem('authToken');
+        const username = sessionStorage.getItem('username');
+        
+        if (authToken) {
+            loginButton.innerText = `Logout (${username})`;
+            signupButton.style.display = 'none';
+            loginButton.onclick = function() {
+                event.preventDefault();
+                sessionStorage.removeItem('authToken');
+                sessionStorage.removeItem('username');
+                location.reload();
+    
+            };
+        } else {
+            loginButton.style.display = 'block';
+        }
+    </script>
+    
 </body>
 </html>
