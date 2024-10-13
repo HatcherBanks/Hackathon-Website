@@ -1,169 +1,219 @@
 <!DOCTYPE html>
-<html>
-    <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a New Game</title>
     <style>
-        body {font-family: Aptos;}
-        form {border: 10px solid #f1f1f1;}
-        
-        input[type=text] {
-          width: 100%;
-          padding: 14px 20px;
-          margin: 9px 0;
-          display: inline-block;
-          border: 1px solid #cccccc;
-          box-sizing: border-box;
+        /* Importing Aptos font from Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Aptos', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
         }
-        
-        button {
-          background-color: #040aaa;
-          color: white;
-          padding: 14px 20px;
-          margin: 8px 0;
-          border: none;
-          cursor: pointer;
-          width: 100%;
+
+        h3 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
         }
-        
-        .cancelbtn {
-          width: auto;
-          padding: 10px 18px;
-          background-color: #f44336;
+
+        form {
+            background-color: #fff;
+            border: 1px solid #f1f1f1;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
-        .imgcontainer {
-          text-align: center;
-          margin: 24px 0 12px 0;
-          width: 500px;
-          height: 500px;
-        }
-        
+
         .container {
-          padding: 16px;
+            display: flex;
+            flex-direction: column;
         }
-        
-        span.psw {
-          float: right;
-          padding-top: 16px;
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            color: #555;
         }
-        
-        @media screen and (max-width: 300px) {
-          span.psw {
-             display: block;
-             float: none;
-          }
-          .cancelbtn {
-             width: 100%;
-          }
+
+        input[type="text"],
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 10px 15px;
+            margin: 5px 0 15px 0;
+            display: block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
-        </style>
-    </head>
-    <body>
-        <h3> Add a new game here </h3>
-        <form id="gameForm" method="post"></form>
-          <div class = "container">
+
+        button {
+            background-color: #040aaa;
+            color: white;
+            padding: 12px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #030a8c;
+        }
+
+        .cancelbtn {
+            background-color: #f44336;
+            width: auto;
+            padding: 10px 18px;
+            margin-top: 20px;
+        }
+
+        .cancelbtn:hover {
+            background-color: #da190b;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        @media screen and (max-width: 600px) {
+            form {
+                padding: 15px;
+            }
+
+            .cancelbtn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h3>Add a New Game</h3>
+    <form id="gameForm" method="post">
+        <div class="container">
+            <!-- Upload Image -->
             <label for="image">Upload Image:</label>
             <input type="file" id="image" name="image" accept="image/*" required>
-            <br>
-            <label>
-                <b> Title </b>
-            </label>
-            <input id="title" type="text" placeholder="Title" required> 
 
-            <label>
-                <b> Description </b>
-            </label>
-            <input id="description" type="text" placeholder="Description" required>
+            <!-- Title -->
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" placeholder="Title" required> 
 
-            <label>
-                <b> Price </b>
-            </label>
-            <input id="price" type="text" placeholder="Price" required>
+            <!-- Description -->
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" placeholder="Description" required>
 
-            <label for="Genre"> <label> <b> Genre </b></label> <br> </label>
-            <select id="Genre" name="Genre">
-               <option value="Horror">Horror</option>
-               <option value="Action">Action</option>
-               <option value="Adventure">Adventure</option>
-               <option value="RPG">RPG</option>
-               <option value="Strategy">Strategy</option>
-               <option value="Simulation">Simulation</option>
-               <option value="Sport">Sport</option>
-               <option value="Puzzle">Puzzle</option>
+            <!-- Price -->
+            <label for="price">Price:</label>
+            <input type="text" id="price" name="price" placeholder="Price" required>
+
+            <!-- Genre -->
+            <label for="genre">Genre:</label>
+            <select id="genre" name="genre" required>
+                <option value="" disabled selected>Select Genre</option>
+                <option value="Horror">Horror</option>
+                <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
+                <option value="RPG">RPG</option>
+                <option value="Strategy">Strategy</option>
+                <option value="Simulation">Simulation</option>
+                <option value="Sport">Sport</option>
+                <option value="Puzzle">Puzzle</option>
             </select>
             
-            <br>
-            <br>
-            <br>
-            <label for="Type"><label> <b> Type </b></label> <br> </label>
-            <select id="Type" name="Type">
-               <option value="TwoD">2D</option>
-               <option value="ThreeD">3D</option>
-               <option value="VR">VR</option>
-               <option value="AR">AR</option>
-               <option value="TextBased">TextBased</option>
+            <!-- Type -->
+            <label for="type">Type:</label>
+            <select id="type" name="type" required>
+                <option value="" disabled selected>Select Type</option>
+                <option value="TwoD">2D</option>
+                <option value="ThreeD">3D</option>
+                <option value="VR">VR</option>
+                <option value="AR">AR</option>
+                <option value="TextBased">Text-Based</option>
             </select>
 
-            <br>
-            <button type="submit"> Submit </button>
-          </div>
-        </form>
+            <!-- Submit Button -->
+            <button type="submit">Submit</button>
 
-        <div class="container" style="background-color:#f1f1f1">
-          <a href="index.html"> <button type="button" class="cancelbtn">Cancel</button> </a>
+            <!-- Cancel Button -->
+            <div class="btn-container">
+                <button type="button" class="cancelbtn" onclick="window.location.href='index.html'">Cancel</button>
+            </div>
         </div>
+    </form>
 
-      <script>
+    <script>
         const BASE_URL = 'http://localhost:8080';
+
         document.getElementById('gameForm').addEventListener('submit', function(event) {
-          event.preventDefault();
+            event.preventDefault();
 
-          const fileInput = document.getElementById('image');
-          const title = document.getElementById('email').value;
-          const description = document.getElementById('description').value;
-          const price = document.getElementById('price').value;
-          const genre = document.getElementById('Genre').value;
-          const type = document.getElementById('Type').value;
-          const file = fileInput.files[0];
+            const fileInput = document.getElementById('image');
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const price = document.getElementById('price').value;
+            const genre = document.getElementById('genre').value;
+            const type = document.getElementById('type').value;
+            const file = fileInput.files[0];
 
-          console.log("enterd handle");
-          console.log(file);
-          if (file) {
-              const reader = new FileReader();
-              reader.onloadend = function() {
-                  const base64Image = reader.result.split(',')[1]; // Getting the base64 part of the data URL
+            console.log("Entered handle");
+            console.log(file);
 
-                  const jsonObject = {
-                      image: base64Image,
-                      title: title,
-                      description: description,
-                      price: price,
-                      genre: genre,
-                      type: type
-                  };
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    const base64Image = reader.result.split(',')[1]; // Getting the base64 part of the data URL
 
-                  fetch(BASE_URL + "/game", {
-                      method: 'POST',
-                      headers: {
-                          'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify(jsonObject)
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                      console.log('Success:', data);
-                      // Handle the response data
-                  })
-                  .catch(error => {
-                      console.error('Error:', error);
-                  });
-              };
-              reader.readAsDataURL(file); // Convert file to base64 string
-          } else {
-              console.error('No file selected.');
-          }
+                    const jsonObject = {
+                        image: base64Image,
+                        title: title,
+                        description: description,
+                        price: price,
+                        genre: genre,
+                        type: type
+                    };
+
+                    fetch(`${BASE_URL}/game`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(jsonObject)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Success:', data);
+                        alert('Game added successfully!');
+                        // Optionally, reset the form
+                        document.getElementById('gameForm').reset();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error adding the game. Please try again.');
+                    });
+                };
+                reader.readAsDataURL(file); // Convert file to base64 string
+            } else {
+                console.error('No file selected.');
+                alert('Please select an image to upload.');
+            }
         });
-      </script>  
-    </body>
+    </script>  
+</body>
 </html>
