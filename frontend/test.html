@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Games</title>
+    <style>
+        body { font-family: 'Aptos', sans-serif; background-color: #f9f9f9; margin: 0; padding: 20px; }
+        .game { display: flex; align-items: flex-start; margin: 20px 0; border: 1px solid #ddd; padding: 10px; border-radius: 8px; background-color: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .game img { max-width: 150px; height: auto; margin-right: 20px; border-radius: 4px; }
+        .game-details { display: flex; flex-direction: column; }
+        .title, .description, .price, .genre, .type { margin: 5px 0; }
+        .delete-btn { background-color: #f44336; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        .delete-btn:hover { background-color: #d32f2f; }
+        @media (max-width: 600px) { .game { flex-direction: column; align-items: center; } .game img { margin-right: 0; margin-bottom: 10px; } .game-details { align-items: center; text-align: center; } }
+    </style>
+</head>
+<body>
+    <h3>Games List</h3>
+    <div id="gamesList"></div>
+    <script>
+        const BASE_URL = 'http://localhost:8080';
+        const token = sessionStorage.getItem('authToken');
+
+        const fetchGames = () => {
+            fetch(`${BASE_URL}/game`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayGames(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+
+        const deleteGame = (gameId) => {
+            fetch(`${BASE_URL}/game/${gameId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                fetchGames(); // Refresh the games list after deletion
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+
+        const displayGames = (games) => {
+            const gamesList = document.getElementById('gamesList');
+            gamesList.innerHTML = '';
+            games.forEach(game => {
+                const gameDiv = document.createElement('div');
+                gameDiv.classList.add('game');
+
+                const img = document.createElement('img');
+                img.src = `data:image/jpeg;base64,${game.image}`;
+                gameDiv.appendChild(img);
+
+                const gameDetails = document.createElement('div');
+                gameDetails.classList.add('game-details');
+
+                const title = document.createElement('div');
+                title.classList.add('title');
+                title.textContent = `Title: ${game.title}`;
+                gameDetails.appendChild(title);
+
+                const description = document.createElement('div');
+                description.classList.add('description');
+                description.textContent = `Description: ${game.description}`;
+                gameDetails.appendChild(description);
+
+                const price = document.createElement('div');
+                price.classList.add('price');
+                price.textContent = `Price: $${game.price}`;
+                gameDetails.appendChild(price);
+
+                const genre = document.createElement('div');
+                genre.classList.add('genre');
+                genre.textContent = `Genre: ${game.genre}`;
+                gameDetails.appendChild(genre);
+
+                const type = document.createElement('div');
+                type.classList.add('type');
+                type.textContent = `Type: ${game.type}`;
+                gameDetails.appendChild(type);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.onclick = () => deleteGame(game.id);
+                gameDetails.appendChild(deleteBtn);
+
+                gameDiv.appendChild(gameDetails);
+                gamesList.appendChild(gameDiv);
+            });
+        };
+
+        fetchGames();
+    </script>
+</body>
+</html>
+
