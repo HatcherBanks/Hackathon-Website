@@ -73,6 +73,7 @@ body {
 .left-column-container {
     background-color: #EEEEEE;
     margin-right: 0;
+    padding-top: 20px;
     width: 200px;
     height: 100vh;
     overflow-y: auto;
@@ -156,9 +157,11 @@ body {
 } 
 
 .about {
-    width: 1000px;
+    max-width: 1000px;
     align-items: center;
     font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    justify-content: center;
 }
 
 #about-heading {
@@ -179,5 +182,12 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0;
     height: 25vh;
+}
+
+#creator-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
