@@ -1,0 +1,33 @@
+package edu.hackaton.backend.service;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
+
+import edu.hackaton.backend.model.Role;
+import edu.hackaton.backend.model.User;
+import edu.hackaton.backend.repo.UserRepo;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RequiredArgsConstructor
+@Component
+public class DataInserter implements ApplicationRunner{
+    private final UserRepo userRepo;
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        log.info("check if admin user exists ...");
+        Optional<User> adminUserOptional = userRepo.findUserByEmail("admin@gmail.com");
+        if(adminUserOptional.isEmpty()){
+            log.info("Saving admin user ...");
+            userRepo.save(User.builder().firstName("Admin").lastName("Admin").email("admin@gmail.com").password("{noop}admin").role(Role.ADMIN).birthDate(LocalDate.now().minusYears(1)).userName("admin").phoneNumber("911").build());
+        }
+        else {
+            log.info("Admin user already exists: {}", adminUserOptional);
+        }
+    }
+}

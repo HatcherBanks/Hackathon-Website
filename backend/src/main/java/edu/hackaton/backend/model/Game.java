@@ -6,10 +6,12 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -27,6 +29,10 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     public UUID id;
+
+    @Lob
+    @Column(name = "image", columnDefinition="BLOB")
+    private byte[] image;
 
     @NotBlank(message = "Title is required")
     private String title;
