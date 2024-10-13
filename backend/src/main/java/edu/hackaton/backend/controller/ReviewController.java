@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.hackaton.backend.model.Review;
+import edu.hackaton.backend.repo.UserRepo;
 import edu.hackaton.backend.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ReviewController {
     @Autowired
     private ReviewService reviewService;
+
+    @Autowired
+    private UserRepo userRepo;
 
     @GetMapping("")
     public List<Review> getAllReviews() {
@@ -44,5 +48,10 @@ public class ReviewController {
     @DeleteMapping("deleteReview/{reviewId}")
     public void deleteReview(@PathVariable("reviewId") UUID reviewId, Authentication auth) {
         reviewService.deleteReview(reviewId, auth.getName());
+    }
+
+    @GetMapping("friendReviews")
+    public Set<Review> getFriendReviews(Authentication auth) {
+        return reviewService.getFriendReviews(auth.getName());
     }
 }

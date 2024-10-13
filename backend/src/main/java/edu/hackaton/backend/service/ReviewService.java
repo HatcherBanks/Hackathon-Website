@@ -3,6 +3,7 @@ package edu.hackaton.backend.service;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -62,5 +63,11 @@ public class ReviewService {
 
     public Set<Review> getReviewsFromGameById(UUID gameId) {
         return reviewRepo.findReviewsByGameId(gameId);
+    }
+
+    public Set<Review> getFriendReviews(String name) {
+        Set<User> friends = userRepo.findUserByEmail(name).get().getFriends();
+        Set<Review> reviews = friends.stream().map(User::getReviews).flatMap(Set::stream).collect(Collectors.toSet());
+        return reviews;
     }
 }
