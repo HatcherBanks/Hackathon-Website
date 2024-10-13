@@ -34,6 +34,18 @@
         .title, .description, .price, .genre, .type { 
             margin: 5px 0; 
         }
+        .delete-button {
+            align-self: flex-start;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #ff1a1a;
+        }
     </style>
 </head>
 <body>
@@ -87,7 +99,7 @@
         if (authToken) {
             loginButton.innerText = `Logout (${username})`;
             signupButton.style.display = 'none';
-            loginButton.onclick = function() {
+            loginButton.onclick = function(event) {
                 event.preventDefault();
                 sessionStorage.removeItem('authToken');
                 sessionStorage.removeItem('username');
@@ -103,7 +115,7 @@
         // Fetch want-to-play games from the backend
         const BASE_URL = 'http://localhost:8080';
         const fetchWantToPlayGames = () => {
-            fetch(`${BASE_URL}/users/wantToPlay`, {
+            fetch(`${BASE_URL}/users/getGamesWantToPlay`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${authToken}`
@@ -152,8 +164,34 @@
                 genre.textContent = `Genre: ${game.genre}`;
                 gameDetails.appendChild(genre);
 
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteGame(game.id);
+
                 gameDiv.appendChild(gameDetails);
+                gameDiv.appendChild(deleteButton);
                 wantToPlayContainer.appendChild(gameDiv);
+            });
+        };
+
+        // Delete game from want-to-play list
+        const deleteGame = (gameId) => {
+            fetch(`${BASE_URL}/users/removeGameFromWantToPlay/${gameId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    fetchWantToPlayGames(); // Refresh the list
+                } else {
+                    console.error('Error deleting game:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting game:', error);
             });
         };
 

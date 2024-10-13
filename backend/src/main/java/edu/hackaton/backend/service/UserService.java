@@ -146,4 +146,19 @@ public class UserService {
         User user = userRepo.findUserByEmail(email).get();
         return user.getFriends();
     }
+
+    public Set<Game> getGamesWantToPlay(String name) {
+        User user = userRepo.findUserByEmail(name).get();
+        return user.getWantToPlay();
+    }
+
+    public Set<Game> getGamesCurrentlyPlaying(String name) {
+        User user = userRepo.findUserByEmail(name).get();
+        return user.getCurentlyPlaying();
+    }
+
+    public Set<Game> getGamesCompleted(String name) {
+        User user = userRepo.findUserByEmail(name).get();
+        return user.getCompleted();
+    }
 }
