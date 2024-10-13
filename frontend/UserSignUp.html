@@ -1,107 +1,100 @@
 <!DOCTYPE html>
-<html>
-    <head>
-      <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            body {font-family: Aptos;}
-form {border: 10px solid #f1f1f1;}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h3>Sign Up</h3>
+    <form action="page.html" method="post" enctype="multipart/form-data">
+        <!-- Container for form elements -->
+        <div class="container">
+            <!-- First Name and Last Name -->
+            <div class="name-container">
+                <div class="input-group">
+                    <label for="fname">First Name</label>
+                    <input type="text" id="fname" name="fname" placeholder="First name" required>
+                </div>
+                <div class="input-group">
+                    <label for="lname">Last Name</label>
+                    <input type="text" id="lname" name="lname" placeholder="Last name" required>
+                </div>
+            </div>
 
-input[type=text], input[type=password] {
-  width: 100%;
-  padding: 14px 20px;
-  margin: 9px 0;
-  display: inline-block;
-  border: 1px solid #cccccc;
-  box-sizing: border-box;
-}
+            <!-- Email -->
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Email" required>
+            </div>
 
-button {
-  background-color: #04aa54;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
+            <!-- Phone Number -->
+            <div class="input-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Phone number" pattern="[0-9]{10}" required>
+            </div>
 
-.cancelbtn {
-  width: auto;
-  padding: 10px 18px;
-  background-color: #f44336;
-}
+            <!-- Username -->
+            <div class="input-group">
+                <label for="uname">Username</label>
+                <input type="text" id="uname" name="uname" placeholder="Username" required>
+            </div>
 
-.imgcontainer {
-  text-align: center;
-  margin: 24px 0 12px 0;
-  width: 500px;
-  height: 500px;
-}
+            <!-- Password -->
+            <div class="input-group">
+                <label for="psw">Password</label>
+                <input type="password" id="psw" name="psw" placeholder="Enter password" required>
+            </div>
 
-img.avatar {
-  width: 40%;
-  border-radius: 50%;
-}
+            <!-- Confirm Password -->
+            <div class="input-group">
+                <label for="psw-repeat">Confirm Password</label>
+                <input type="password" id="psw-repeat" name="psw-repeat" placeholder="Enter password again" required>
+            </div>
 
-.container {
-  padding: 16px;
-}
+            <!-- Birth Date -->
+            <div class="input-group">
+                <label>Birth Date</label>
+                <div class="birthdate-container">
+                    <input type="number" id="birth-month" name="birth-month" placeholder="Month" min="1" max="12" required>
+                    <input type="number" id="birth-day" name="birth-day" placeholder="Day" min="1" max="31" required>
+                    <input type="number" id="birth-year" name="birth-year" placeholder="Year" min="1900" max="2100" required>
+                </div>
+            </div>
 
-span.psw {
-  float: right;
-  padding-top: 16px;
-}
+            <!-- Gender -->
+            <div class="input-group">
+                <label>Gender</label>
+                <div class="gender-container">
+                    <label>
+                        <input type="radio" name="gender" value="Male" required> Male
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="Female" required> Female
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="Other" required> Other
+                    </label>
+                </div>
+            </div>
 
-@media screen and (max-width: 300px) {
-  span.psw {
-     display: block;
-     float: none;
-  }
-  .cancelbtn {
-     width: 100%;
-  }
-}
-        </style>
-    </head>
+            <!-- Terms and Conditions -->
+            <p>
+                By clicking Sign Up, you agree to our <a href="#">Terms</a> and that you have read our <a href="#">Data Use Policy</a>.
+            </p>
 
-    <body>
-        <h3> Sign Up </h3>
-        <title> </title>
-        <form action="page.html" method="post">
-            <!--send information to the page above-->
-            
-              <div class="container">
-               
-                <input type="text" placeholder="First name" name="fname" required> <input type="text" placeholder="Last name" name="lname" required>
-                <input type="text" placeholder="Email" require>
-                <input type="text" placeholder="Phone number" require>
-                <input type="text" placeholder="Username" name="uname" required>
-                <input type="password" placeholder="Enter password" require>
-                <input type="password" placeholder="Enter password again" require>
+            <!-- Submit Button -->
+            <button type="submit">Sign Up</button>
+        </div>
 
-                <label>
-                    <h3> Birth day </h3>
-                </label>
-
-                <input type="number" placeholder="Month" require> <input type="number" placeholder="Day" require>   <input type="number" placeholder="Year" require>
-                
-                <label>
-                    <input type="checkbox"  name="remember"> Male
-                    <input type="checkbox"  name="remember"> Female
-                  </label>
-                
-                  <p>
-                    By clicking Sign Up, you agree to our Terms and that you have read our Data Use Policy  
-                  </p>
-                
-                <button type="submit"> Sign Up </button>
-
-              </div>
-            
-              <div class="container" style="background-color:#f1f1f1">
-                <a href="index.html"> <button type="button" class="cancelbtn">Cancel</button> </a>
-              </div>
-            </form>
-    </body>
+        <!-- Cancel Button -->
+        <div class="container cancel-container">
+            <a href="index.html">
+                <button type="button" class="cancelbtn">Cancel</button>
+            </a>
+        </div>
+    </form>
+</body>
 </html>

@@ -1,141 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: Aptos;}
-form {border: 10px solid #f1f1f1;}
-
-input[type=text], input[type=password] {
-  width: 100%;
-  padding: 14px 20px;
-  margin: 9px 0;
-  display: inline-block;
-  border: 1px solid #cccccc;
-  box-sizing: border-box;
-}
-
-button {
-  background-color: #040aaa;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
-
-.cancelbtn {
-  width: auto;
-  padding: 10px 18px;
-  background-color: #f44336;
-}
-
-.imgcontainer {
-  text-align: center;
-  margin: 24px 0 12px 0;
-  width: 500px;
-  height: 500px;
-}
-
-img.avatar {
-  width: 40%;
-  border-radius: 50%;
-}
-
-.container {
-  padding: 16px;
-}
-
-span.psw {
-  float: right;
-  padding-top: 16px;
-}
-
-@media screen and (max-width: 300px) {
-  span.psw {
-     display: block;
-     float: none;
-  }
-  .cancelbtn {
-     width: 100%;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <h3>Login</h3>
+    <form id="LoginForm" method="post">
+        <div class="container">
+            <div class="input-group">
+                <label for="email"><b>Email</b></label>
+                <input id="email" type="email" placeholder="Enter Email" name="email" required>
+            </div>
 
-<h3>Login</h3>
+            <div class="input-group">
+                <label for="password"><b>Password</b></label>
+                <input id="password" type="password" placeholder="Enter Password" name="password" required>
+            </div>
 
-<form id="LoginForm" method="post">
-<!--send information to the page above-->
+            <div class="input-group checkbox-group">
+                <label>
+                    <input type="checkbox" name="remember" checked> Remember me
+                </label>
+            </div>
 
-  <div class="container">
-    <label for="uname">
-        <b> Email </b>
-    </label>
+            <button type="submit">Login</button>
+        </div>
 
-    <input id="email" type="text" placeholder="Enter Email" name="uname" required>
+        <div class="container cancel-container">
+            <a href="index.html">
+                <button type="button" class="cancelbtn">Cancel</button>
+            </a>
+            <span class="psw"><a href="#">Forgot password?</a></span>
+        </div>
+    </form>
 
-    <label for="psw">
-        <b> Password </b>
-    </label>
+    <script>
+        const BASE_URL = 'http://localhost:8080';
 
-    <input id="password" type="password" placeholder="Enter Password" name="psw" required>
-        
-    <button type="submit"> Login </button>
-    <label>
-      <input type="checkbox" checked="checked" name="remember"> Remember me
-    </label>
-  </div>
+        const loginUser = (loginRequest) => {
+            return fetch(`${BASE_URL}/auth/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(loginRequest),
+            });
+        };
 
-  <div class="container" style="background-color:#f1f1f1">
-    <a href="index.html"> <button type="button" class="cancelbtn">Cancel</button> </a>
-    <span class="psw"><a href="#">Forgot password?</a></span>
-  </div>
-</form>
+        document.getElementById('LoginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
 
-<script>
-  const BASE_URL = 'http://localhost:8080';
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
 
-  const loginUser = (loginRequest) => {
-      return fetch(BASE_URL + "/auth/login", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify(loginRequest),
-      });
-  };
-
-  document.getElementById('LoginForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      const username = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      const loginRequest = {
-          email: username,
-          password: password
-      };
-
-      loginUser(loginRequest)
-          .then(response => response.json())
-          .then(data => {
-            if (data.accessToken) {
-              sessionStorage.setItem('authToken', data.accessToken);
-              sessionStorage.setItem('username', data.username);
-              sessionStorage.setItem('role', data.role);
-              window.location.href = 'index.html'
+            if (!email || !password) {
+                alert('Please enter both email and password.');
+                return;
             }
-            return data;
-          })
-          .catch(error => {
-              console.error('Error:', error);
-          });
-  });
 
-</script>
+            const loginRequest = {
+                email: email,
+                password: password
+            };
+
+            loginUser(loginRequest)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.accessToken) {
+                        sessionStorage.setItem('authToken', data.accessToken);
+                        sessionStorage.setItem('username', data.username);
+                        sessionStorage.setItem('role', data.role);
+                        window.location.href = 'index.html';
+                    } else {
+                        alert('Login failed. Please check your credentials and try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred during login. Please try again later.');
+                });
+        });
+    </script>
 </body>
 </html>
