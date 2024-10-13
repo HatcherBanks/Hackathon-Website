@@ -14,10 +14,12 @@
         <div class="navbar-container">
             <ul class="navbar-links">
                 <li><a href="index.html"><button class="link-btns">Home</button></a></li>
+                <li><a href="gameCatalog.html"><button class="link-btns">Browse</button></a></li>
                 <li><a href="aboutPg.html"><button class="link-btns">About</button></a></li>
-                <li><a href="UserSignUp.html"><button class="link-btns">Signup</button></a></li>
-                <li><a href="UserlogIn.html"><button class="link-btns">Login</button></a></li>
+                <li><a href="UserSignUp.html"><button class="link-btns" id="signupButton">Signup</button></a></li>
+                <li><a href="UserlogIn.html"><button id=loginButton class="link-btns">Login</button></a></li>
                 <li style="display: none;"><a href="#account"><button class="link-btns">Account</button></a></li>
+                <li><a href="AddGame.html"><button class="link-btns">Admin</button></a></li>
             </ul>
         </div>
     </header>
@@ -56,6 +58,27 @@
     <footer>
         <p>&copy; 2024 Your Company Name. All rights reserved.</p>
     </footer>
+
+    <script>
+        const loginButton = document.getElementById('loginButton');
+        const signupButton = document.getElementById('signupButton')
+        const authToken = sessionStorage.getItem('authToken');
+        const username = sessionStorage.getItem('username');
+        
+        if (authToken) {
+            loginButton.innerText = `Logout (${username})`;
+            signupButton.style.display = 'none';
+            loginButton.onclick = function() {
+                event.preventDefault();
+                sessionStorage.removeItem('authToken');
+                sessionStorage.removeItem('username');
+                location.reload();
+    
+            };
+        } else {
+            loginButton.style.display = 'block';
+        }
+    </script>
 
 </body>
 </html>
