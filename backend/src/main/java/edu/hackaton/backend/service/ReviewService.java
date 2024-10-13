@@ -1,6 +1,7 @@
 package edu.hackaton.backend.service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,5 +58,9 @@ public class ReviewService {
         game.getReviews().remove(review);
         gameRepo.save(game);
         reviewRepo.delete(review);
+    }
+
+    public Set<Review> getReviewsFromGameById(UUID gameId) {
+        return reviewRepo.findReviewsByGameId(gameId);
     }
 }

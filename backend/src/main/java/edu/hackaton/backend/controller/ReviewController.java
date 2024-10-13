@@ -1,6 +1,7 @@
 package edu.hackaton.backend.controller;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,11 @@ public class ReviewController {
     @GetMapping("")
     public List<Review> getAllReviews() {
         return reviewService.getAllReviews();
+    }
+
+    @GetMapping("getReviewsFromGameById/{gameId}")
+    public Set<Review> getReviewsFromGameById(@PathVariable("gameId") UUID gameId) {
+        return reviewService.getReviewsFromGameById(gameId);
     }
 
     @PostMapping("addReview/{gameId}")
