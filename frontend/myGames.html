@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Games</title>
+    <title>All Games</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -28,21 +28,27 @@
                 <li><a href="currentlyplaying.html"><button class="left-link-btns">Currently Playing</button></a></li>
                 <li><a href="gamesPlayed.html"><button class="left-link-btns">Played</button></a></li>
                 <li><a href="wantToPlay.html"><button class="left-link-btns">Want to Play</button></a></li>
-                <li><a href="myGames.html"><button class="left-link-btns">All Games</button></a></li>
+                <li><a href="myGames.html"><button class="left-link-btns" style="background-color: #134B70; color: #EEEEEE;">All Games</button></a></li>
             </ul>
         </div>
-        
+
         <div class="dashboard-container">
-            <div class="my-games-container">
-                <div class="games-current">
-                    <h2>Current games</h2>
-                </div>
-                <div class="games-want-to-play">
-                    <h2>Want to play</h2>
-                </div>
-                <div class="game-completed">
-                    <h2>Completed Games</h2>
-                </div>
+            <!-- Currently Playing Section -->
+            <div class="games-section">
+                <h2>Currently Playing</h2>
+                <div id="currently-playing-container" class="games-section-container"></div>
+            </div>
+
+            <!-- Played Games Section -->
+            <div class="games-section">
+                <h2>Played Games</h2>
+                <div id="played-games-container" class="games-section-container"></div>
+            </div>
+
+            <!-- Want to Play Section -->
+            <div class="games-section">
+                <h2>Want to Play</h2>
+                <div id="want-to-play-container" class="games-section-container"></div>
             </div>
         </div>
     </div>
@@ -50,7 +56,8 @@
     <footer>
         <p>&copy; 2024 Your Company Name. All rights reserved.</p>
     </footer>
-    
+
+    <script src="myGames.js"></script>
 
 </body>
 </html>
