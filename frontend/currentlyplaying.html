@@ -19,7 +19,7 @@
                 <li><a href="UserSignUp.html"><button class="link-btns" id="signupButton">Signup</button></a></li>
                 <li><a href="UserlogIn.html"><button id=loginButton class="link-btns">Login</button></a></li>
                 <li style="display: none;"><a href="#account"><button class="link-btns">Account</button></a></li>
-                <li><a href="AddGame.html"><button class="link-btns">Admin</button></a></li>
+                <li><a href="AddGame.html"><button style="display: none;" id="AddGame" class="link-btns">Admin</button></a></li>
             </ul>
         </div>
     </header>
@@ -50,8 +50,10 @@
     <script>
         const loginButton = document.getElementById('loginButton');
         const signupButton = document.getElementById('signupButton')
+        const addGame = document.getElementById('AddGame');
         const authToken = sessionStorage.getItem('authToken');
         const username = sessionStorage.getItem('username');
+        const role = sessionStorage.getItem('role');
         
         if (authToken) {
             loginButton.innerText = `Logout (${username})`;
@@ -63,6 +65,9 @@
                 location.reload();
     
             };
+            if (role == 'ADMIN') {
+                addGame.style.display = 'block';
+            }
         } else {
             loginButton.style.display = 'block';
         }

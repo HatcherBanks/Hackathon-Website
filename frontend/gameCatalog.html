@@ -6,9 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hackathon Website</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body { font-family: 'Aptos', sans-serif; background-color: #f9f9f9; margin: 0; }
+        .game { display: flex; align-items: flex-start; justify-content: space-between; margin: 20px 0; border: 1px solid #ddd; padding: 10px; border-radius: 8px; background-color: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .game img { max-width: 150px; height: auto; margin-right: 20px; border-radius: 4px; }
+        .game-details { display: flex; flex-direction: column; flex-grow: 1; margin-right: 20px; }
+        .title, .description, .price, .genre, .type { margin: 5px 0; }
+        .buttons-container { display: flex; flex-direction: column; justify-content: flex-start; }
+        .action-btn { background-color: #04aa54; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 10px; }
+        .action-btn:hover { background-color: #038a3c; }
+        .delete-btn { background-color: #f44336; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 10px; }
+        .delete-btn:hover { background-color: #d32f2f; }
+        @media (max-width: 600px) {
+            .game { flex-direction: column; align-items: center; }
+            .game img { margin-right: 0; margin-bottom: 10px; }
+            .game-details { align-items: center; text-align: center; }
+            .buttons-container { flex-direction: row; justify-content: center; }
+            .action-btn, .delete-btn { margin-bottom: 0; margin-right: 10px; }
+        }
+    </style>
 </head>
 <body>
-
     <header class="header-container">
         <h1>Hackathon Website</h1>
         <div class="navbar-container">
@@ -19,11 +37,10 @@
                 <li><a href="UserSignUp.html"><button class="link-btns" id="signupButton">Signup</button></a></li>
                 <li><a href="UserlogIn.html"><button id=loginButton class="link-btns">Login</button></a></li>
                 <li style="display: none;"><a href="#account"><button class="link-btns">Account</button></a></li>
-                <li><a href="AddGame.html"><button class="link-btns">Admin</button></a></li>
+                <li><a href="AddGame.html"><button style="display: none;" id="AddGame" class="link-btns">Admin</button></a></li>
             </ul>
         </div>
     </header>
-
     <div class="container">
         <div class="left-column-container">
             <ul class="left-col-links">
@@ -33,24 +50,24 @@
                 <li><a href="myGames.html"><button class="left-link-btns">All Games</button></a></li>
             </ul>
         </div>
-        
         <div class="dashboard-container">
             <div class="game-catalog-container">
-                <h2> ame Catalog</h2>
+                <h2>Game Catalog</h2>
+                <div id="gamesList"></div>
             </div>
         </div>
     </div>
-
     <footer>
         <p>&copy; 2024 Your Company Name. All rights reserved.</p>
     </footer>
-
     <script>
         const loginButton = document.getElementById('loginButton');
-        const signupButton = document.getElementById('signupButton')
+        const signupButton = document.getElementById('signupButton');
+        const addGame = document.getElementById('AddGame');
         const authToken = sessionStorage.getItem('authToken');
         const username = sessionStorage.getItem('username');
-        
+        const role = sessionStorage.getItem('role');
+
         if (authToken) {
             loginButton.innerText = `Logout (${username})`;
             signupButton.style.display = 'none';
@@ -59,13 +76,149 @@
                 sessionStorage.removeItem('authToken');
                 sessionStorage.removeItem('username');
                 location.reload();
-    
             };
+            if (role == 'ADMIN') {
+                addGame.style.display = 'block';
+            }
         } else {
             loginButton.style.display = 'block';
         }
+
+        // Fetch games from the backend and display them
+        const BASE_URL = 'http://localhost:8080';
+        const token = sessionStorage.getItem('authToken');
+
+        const fetchGames = () => {
+            fetch(`${BASE_URL}/game`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayGames(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+
+        const wantToPlay = (gameId) => {
+            fetch(`${BASE_URL}/users/addGameToWantToPlay/${gameId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                } else {
+                    alert('Game added to Want to Play list');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+
+        const deleteGame = (gameId) => {
+            fetch(`${BASE_URL}/game/delete/${gameId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                fetchGames(); // Refresh the games list after deletion
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+
+        const displayGames = (games) => {
+            const gamesList = document.getElementById('gamesList');
+            gamesList.innerHTML = '';
+            games.forEach(game => {
+                const gameDiv = document.createElement('div');
+                gameDiv.classList.add('game');
+
+                const img = document.createElement('img');
+                img.src = `data:image/jpeg;base64,${game.image}`;
+                gameDiv.appendChild(img);
+
+                const gameDetails = document.createElement('div');
+                gameDetails.classList.add('game-details');
+
+                const title = document.createElement('div');
+                title.classList.add('title');
+                title.textContent = `Title: ${game.title}`;
+                gameDetails.appendChild(title);
+
+                const description = document.createElement('div');
+                description.classList.add('description');
+                description.textContent = `Description: ${game.description}`;
+                gameDetails.appendChild(description);
+
+                const price = document.createElement('div');
+                price.classList.add('price');
+                price.textContent = `Price: $${game.price}`;
+                gameDetails.appendChild(price);
+
+                const genre = document.createElement('div');
+                genre.classList.add('genre');
+                genre.textContent = `Genre: ${game.genre}`;
+                gameDetails.appendChild(genre);
+
+                const type = document.createElement('div');
+                type.classList.add('type');
+                type.textContent = `Type: ${game.type}`;
+                gameDetails.appendChild(type);
+
+                // Buttons container
+                const buttonsContainer = document.createElement('div');
+                buttonsContainer.classList.add('buttons-container');
+
+                // Add action buttons
+                const wantToPlayBtn = document.createElement('button');
+                wantToPlayBtn.classList.add('action-btn');
+                wantToPlayBtn.textContent = 'Want to Play';
+                wantToPlayBtn.onclick = () => wantToPlay(game.id);
+                buttonsContainer.appendChild(wantToPlayBtn);
+
+                const currentlyPlayingBtn = document.createElement('button');
+                currentlyPlayingBtn.classList.add('action-btn');
+                currentlyPlayingBtn.textContent = 'Currently Playing';
+                buttonsContainer.appendChild(currentlyPlayingBtn);
+
+                const alreadyPlayedBtn = document.createElement('button');
+                alreadyPlayedBtn.classList.add('action-btn');
+                alreadyPlayedBtn.textContent = 'Already Played';
+                buttonsContainer.appendChild(alreadyPlayedBtn);
+
+                // Add delete button only if the user is an ADMIN
+                if (role === 'ADMIN') {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.classList.add('delete-btn');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.onclick = () => deleteGame(game.id);
+                    buttonsContainer.appendChild(deleteBtn);
+                }
+
+                // Append buttons container next to game details
+                gameDiv.appendChild(gameDetails);
+                gameDiv.appendChild(buttonsContainer);
+                gamesList.appendChild(gameDiv);
+            });
+        };
+
+        fetchGames();
     </script>
-
-
 </body>
 </html>
