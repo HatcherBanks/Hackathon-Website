@@ -1,6 +1,7 @@
 package edu.hackaton.backend.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,5 +23,10 @@ public class GameController {
     @PostMapping("")
     public Game addGame(@RequestBody Game game) {
         return gameService.addGame(game);
+    }
+
+    @DeleteMapping("/{gameId}")
+    public void deleteGame(@PathVariable UUID gameId) {
+        gameService.deleteGame(gameId);
     }
 }
