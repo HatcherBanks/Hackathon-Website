@@ -6,11 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Currently Playing</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Add some basic styling for the game cards */
+        .game { 
+            display: flex; 
+            align-items: flex-start; 
+            justify-content: space-between; 
+            margin: 20px 0; 
+            border: 1px solid #ddd; 
+            padding: 10px; 
+            border-radius: 8px; 
+            background-color: #fff; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+        }
+        .game img { 
+            max-width: 150px; 
+            height: auto; 
+            margin-right: 20px; 
+            border-radius: 4px; 
+        }
+        .game-details { 
+            display: flex; 
+            flex-direction: column; 
+            flex-grow: 1; 
+            margin-right: 20px; 
+        }
+        .title, .description, .price, .genre, .type { 
+            margin: 5px 0; 
+        }
+        .delete-button {
+            align-self: flex-start;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #ff1a1a;
+        }
+    </style>
 </head>
 <body>
 
     <header class="header-container">
-        <h1>Hackathon Website</h1>
+        <h1>GameTrackr</h1>
         <div class="navbar-container">
             <ul class="navbar-links">
                 <li><a href="index.html"><button class="link-btns">Home</button></a></li>
@@ -19,7 +60,7 @@
                 <li><a href="UserSignUp.html"><button class="link-btns" id="signupButton">Signup</button></a></li>
                 <li><a href="UserlogIn.html"><button id=loginButton class="link-btns">Login</button></a></li>
                 <li style="display: none;"><a href="#account"><button class="link-btns">Account</button></a></li>
-                <li><a href="AddGame.html"><button class="link-btns">Admin</button></a></li>
+                <li><a href="AddGame.html"><button style="display: none;" id="AddGame" class="link-btns">Admin</button></a></li>
             </ul>
         </div>
     </header>
@@ -35,8 +76,9 @@
         </div>
         
         <div class="dashboard-container">
-            <div class="gamescurrent-container" id="game-container">
-                                
+            <h2>Currently Playing</h2>
+            <div class="currentlyplaying-container" id="currently-playing-container">
+                <!-- Currently Playing games will be dynamically inserted here -->
             </div>
         </div>
     </div>
@@ -44,28 +86,117 @@
     <footer>
         <p>&copy; 2024 Your Company Name. All rights reserved.</p>
     </footer>
-    
-    <script src="gameCard.js"></script>
 
     <script>
         const loginButton = document.getElementById('loginButton');
-        const signupButton = document.getElementById('signupButton')
+        const signupButton = document.getElementById('signupButton');
+        const addGame = document.getElementById('AddGame');
         const authToken = sessionStorage.getItem('authToken');
         const username = sessionStorage.getItem('username');
+        const role = sessionStorage.getItem('role');
+        const currentlyPlayingContainer = document.getElementById('currently-playing-container');
         
         if (authToken) {
             loginButton.innerText = `Logout (${username})`;
             signupButton.style.display = 'none';
-            loginButton.onclick = function() {
+            loginButton.onclick = function(event) {
                 event.preventDefault();
                 sessionStorage.removeItem('authToken');
                 sessionStorage.removeItem('username');
                 location.reload();
-    
             };
+            if (role == 'ADMIN') {
+                addGame.style.display = 'block';
+            }
         } else {
             loginButton.style.display = 'block';
         }
+
+        // Fetch currently playing games from the backend
+        const BASE_URL = 'http://localhost:8080';
+        const fetchCurrentlyPlayingGames = () => {
+            fetch(`${BASE_URL}/users/getGamesCurrentlyPlaying`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayCurrentlyPlayingGames(data);
+            })
+            .catch(error => {
+                console.error('Error fetching currently playing games:', error);
+            });
+        };
+
+        // Display currently playing games
+        const displayCurrentlyPlayingGames = (games) => {
+            currentlyPlayingContainer.innerHTML = ''; // Clear the container
+            if (games.length === 0) {
+                currentlyPlayingContainer.innerHTML = '<p>No games currently being played.</p>';
+                return;
+            }
+
+            games.forEach(game => {
+                const gameDiv = document.createElement('div');
+                gameDiv.classList.add('game');
+
+                const img = document.createElement('img');
+                img.src = `data:image/jpeg;base64,${game.image}`; // Assuming image is base64 encoded
+                gameDiv.appendChild(img);
+
+                const gameDetails = document.createElement('div');
+                gameDetails.classList.add('game-details');
+
+                const title = document.createElement('div');
+                title.classList.add('title');
+                title.textContent = `Title: ${game.title}`;
+                gameDetails.appendChild(title);
+
+                const description = document.createElement('div');
+                description.classList.add('description');
+                description.textContent = `Description: ${game.description}`;
+                gameDetails.appendChild(description);
+
+                const genre = document.createElement('div');
+                genre.classList.add('genre');
+                genre.textContent = `Genre: ${game.genre}`;
+                gameDetails.appendChild(genre);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteGame(game.id);
+
+                gameDiv.appendChild(gameDetails);
+                gameDiv.appendChild(deleteButton);
+                currentlyPlayingContainer.appendChild(gameDiv);
+            });
+        };
+
+        // Delete game from currently playing list
+        const deleteGame = (gameId) => {
+            fetch(`${BASE_URL}/users/removeGameFromCurrentlyPlaying/${gameId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    fetchCurrentlyPlayingGames(); // Refresh the list
+                } else {
+                    console.error('Error deleting game:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting game:', error);
+            });
+        };
+
+        // Fetch the currently playing games on page load
+        fetchCurrentlyPlayingGames();
     </script>
 
 </body>

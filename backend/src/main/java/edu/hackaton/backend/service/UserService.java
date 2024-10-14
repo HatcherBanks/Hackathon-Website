@@ -78,12 +78,12 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(UUID id){
-        User userToDelete = userRepo.findUserById(id);
+    public void deleteUser(String email){
+        User userToDelete = userRepo.findUserByEmail(email).get();
         if (userToDelete == null){
             throw new ServiceException("User", "User with given ID not found!");
         }
-        userRepo.deleteById(id);
+        userRepo.delete(userToDelete);
     }
 
     public User addToWantToPlay(UUID gameId, String email) {
@@ -145,5 +145,29 @@ public class UserService {
     public Set<User> getFriends(String email) {
         User user = userRepo.findUserByEmail(email).get();
         return user.getFriends();
+    }
+
+    public Set<Game> getGamesWantToPlay(String name) {
+        User user = userRepo.findUserByEmail(name).get();
+        return user.getWantToPlay();
+    }
+
+    public Set<Game> getGamesCurrentlyPlaying(String name) {
+        User user = userRepo.findUserByEmail(name).get();
+        return user.getCurentlyPlaying();
+    }
+
+    public Set<Game> getGamesCompleted(String name) {
+        User user = userRepo.findUserByEmail(name).get();
+        return user.getCompleted();
+    }
+
+    public Set<Game> getAllGames(String email) {
+        User user = userRepo.findUserByEmail(email).get();
+        Set<Game> allGames;
+        allGames = user.getWantToPlay();
+        allGames.addAll(user.getCurentlyPlaying());
+        allGames.addAll(user.getCompleted());
+        return allGames;
     }
 }

@@ -1,196 +1,216 @@
 <!DOCTYPE html>
-<html>
-    <head>
-      <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            body {font-family: Aptos;}
-form {border: 10px solid #f1f1f1;}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up</title>
+    <style>
+        body { font-family: Aptos; }
+        form { border: 10px solid #f1f1f1; }
 
-input[type=text], input[type=password] {
-  width: 100%;
-  padding: 14px 20px;
-  margin: 9px 0;
-  display: inline-block;
-  border: 1px solid #cccccc;
-  box-sizing: border-box;
-}
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 14px 20px;
+            margin: 9px 0;
+            display: inline-block;
+            border: 1px solid #cccccc;
+            box-sizing: border-box;
+        }
 
-button {
-  background-color: #04aa54;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
+        button {
+            background-color: #134B70;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
 
-.cancelbtn {
-  width: auto;
-  padding: 10px 18px;
-  background-color: #f44336;
-}
+        .cancelbtn {
+            width: auto;
+            padding: 10px 18px;
+            background-color: #134B70;
+        }
 
-.imgcontainer {
-  text-align: center;
-  margin: 24px 0 12px 0;
-  width: 500px;
-  height: 500px;
-}
+        .imgcontainer {
+            text-align: center;
+            margin: 24px 0 12px 0;
+            width: 500px;
+            height: 500px;
+        }
 
-img.avatar {
-  width: 40%;
-  border-radius: 50%;
-}
+        img.avatar {
+            width: 40%;
+            border-radius: 50%;
+        }
 
-.container {
-  padding: 16px;
-}
+        .container {
+            padding: 16px;
+        }
 
-span.psw {
-  float: right;
-  padding-top: 16px;
-}
+        span.psw {
+            float: right;
+            padding-top: 16px;
+        }
 
-@media screen and (max-width: 300px) {
-  span.psw {
-     display: block;
-     float: none;
-  }
-  .cancelbtn {
-     width: 100%;
-  }
-}
-        </style>
-    </head>
+        @media screen and (max-width: 300px) {
+            span.psw {
+                display: block;
+                float: none;
+            }
+            .cancelbtn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
 
-    <body>
-        <h3> Sign Up </h3>
-        <title> </title>
-        <form action="page.html" method="post">
-            <!--send information to the page above-->
-            
-              <div class="container">
-               
-                <input type="text" placeholder="First name" name="fname" required> <input type="text" placeholder="Last name" name="lname" required>
-                <input type="text" placeholder="Email" require>
-                <input type="text" placeholder="Phone number" require>
-                <input type="text" placeholder="Username" name="uname" required>
-                <input type="password" placeholder="Enter password" require>
-                <input type="password" placeholder="Enter password again" require>
-
-                <label>
-                    <h3> Birth day </h3>
-                </label>
-
-                <select id ="Month" name="Month" required>
-                  <option value="">Month</option>
-                  <option value="Jan">1</option>
-                  <option value="Feb">2</option>
-                  <option value="Mar">3</option>
-                  <option value="Apr">4</option>
-                  <option value="May">5</option>
-                  <option value="Jun">6</option>
-                  <option value="Jul">7</option>
-                  <option value="Aug">8</option>
-                  <option value="Sep">9</option>
-                  <option value="Oct">10</option>
-                  <option value="Nov">11</option>
-                  <option value="Dec">12</option>
-                </select>
-
+<body>
+    <h3>Sign Up</h3>
     
-                <select id="Day" name ="Day" required>
-                  <option value="">Day</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                  <option value="9">9</option>
-                  <option value="10">10</option>
-                  <option value="11">11</option>
-                  <option value="12">12</option>
-                  <option value="13">13</option>
-                  <option value="14">14</option>
-                  <option value="15">15</option>
-                  <option value="16">16</option>
-                  <option value="17">17</option>
-                  <option value="18">18</option>
-                  <option value="19">19</option>
-                  <option value="20">20</option>
-                  <option value="21">21</option>
-                  <option value="22">22</option>
-                  <option value="23">23</option>
-                  <option value="24">24</option>
-                  <option value="25">25</option>
-                  <option value="26">26</option>
-                  <option value="27">27</option>
-                  <option value="28">28</option>
-                  <option value="29">29</option>
-                  <option value="30">30</option>
-                  <option value="31">31</option>
-                </select>
+    <form id="signup" action="page.html" method="post">
+        <!-- Send information to the page above -->
+        <div class="container">
+            <input type="text" id="firstname" placeholder="First name" name="fname" required>
+            <input type="text" id="lastname" placeholder="Last name" name="lname" required>
+            <input type="text" id="email" placeholder="Email" name="email" required>
+            <input type="text" id="phonenumber" placeholder="Phone number" name="phonenumber" required>
+            <input type="text" id="username" placeholder="Username" name="uname" required>
+            <input type="password" id="password" placeholder="Enter password" name="password" required>
+            <input type="password" id="confirm-password" placeholder="Enter password again" name="confirm-password" required>
 
-                
-                  
-    <select id="years" name="year" required>
-      <option value="">Year</option>
-      <option value="2011">2011</option>
-      <option value="2010">2010</option>
-      <option value="2009">2009</option>
-      <option value="2008">2008</option>
-      <option value="2007">2007</option>
-      <option value="2006">2006</option>
-      <option value="2005">2005</option>
-      <option value="2004">2004</option>
-      <option value="2003">2003</option>
-      <option value="2002">2002</option>
-      <option value="2001">2001</option>
-      <option value="2000">2000</option>
-      <option value="1999">1999</option>
-      <option value="1998">1998</option>
-      <option value="1997">1997</option>
-      <option value="1996">1996</option>
-      <option value="1995">1995</option>
-      <option value="1994">1994</option>
-      <option value="1993">1993</option>
-      <option value="1992">1992</option>
-      <option value="1991">1991</option>
-      <option value="1990">1990</option>
-      <option value="1989">1989</option>
-      <option value="1988">1988</option>
-      <option value="1987">1987</option>
-      <option value="1986">1986</option>
-      <option value="1985">1985</option>
-      <option value="1984">1984</option>
-      <option value="1983">1983</option>
-      <option value="1982">1982</option>
-      <option value="1981">1981</option>
-      <option value="1980">1980</option>
-  </select>
-  <br><br>
-                </select>
-                <label>
-                    <input type="checkbox"  name="remember"> Male
-                    <input type="checkbox"  name="remember"> Female
-                  </label>
-                
-                  <p>
-                    By clicking Sign Up, you agree to our Terms and that you have read our Data Use Policy  
-                  </p>
-                
-                <button type="submit"> Sign Up </button>
+            <label><h3>Birth day</h3></label>
 
-              </div>
-            
-              <div class="container" style="background-color:#f1f1f1">
-                <a href="index.html"> <button type="button" class="cancelbtn">Cancel</button> </a>
-              </div>
-            </form>
-    </body>
+            <select id="month" name="month" required>
+                <option value="" disabled selected>Month</option>
+                <option value="01">1</option>
+                <option value="02">2</option>
+                <option value="03">3</option>
+                <option value="04">4</option>
+                <option value="05">5</option>
+                <option value="06">6</option>
+                <option value="07">7</option>
+                <option value="08">8</option>
+                <option value="09">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <select id="day" name="day" required>
+                <option value="" disabled selected>Day</option>
+                <option value="01">1</option>
+                <option value="02">2</option>
+                <option value="03">3</option>
+                <option value="04">4</option>
+                <option value="05">5</option>
+                <option value="06">6</option>
+                <option value="07">7</option>
+                <option value="08">8</option>
+                <option value="09">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+            </select>
+
+            <select id="years" name="year" required>
+                <option value="" disabled selected>Year</option>
+                <!-- Years will be populated by JS -->
+            </select>
+
+            <label>Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="" disabled selected>Select Gender</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+            </select>
+
+            <p>
+                By clicking Sign Up, you agree to our Terms and that you have read our Data Use Policy
+            </p>
+
+            <button type="submit">Sign Up</button>
+        </div>
+
+        <div class="container" style="background-color:#f1f1f1">
+            <a href="index.html"><button type="button" class="cancelbtn">Cancel</button></a>
+        </div>
+    </form>
+
+    <script>
+        const yearSelect = document.getElementById('years');
+        for (let year = 2011; year >= 1980; year--) {
+            let option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            yearSelect.appendChild(option);
+        }
+
+        document.getElementById('signup').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const firstName = document.getElementById('firstname').value;
+            const lastName = document.getElementById('lastname').value;
+            const email = document.getElementById('email').value;
+            const phoneNumber = document.getElementById('phonenumber').value;
+            const userName = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const birthDate = `${document.getElementById('years').value}-${document.getElementById('month').value}-${document.getElementById('day').value}`;
+            const gender = document.getElementById('gender').value;
+            const role = 'USER';
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            const jsonObject = {
+                firstName, lastName, email, phoneNumber, userName, password, birthDate, gender, role
+            };
+
+            fetch('http://localhost:8080/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonObject)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                if (response.status === 201) {
+                  alert('Registration successful. Please login to continue.');
+                  window.location.href = 'index.html';
+                }
+                return response.json();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error during registration. Please try again.');
+            });
+        });
+    </script>
+</body>
 </html>

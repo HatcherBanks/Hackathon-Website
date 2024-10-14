@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hackathon Website</title>
+    <title>GameTrackr</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body { font-family: 'Aptos', sans-serif; background-color: #f9f9f9; margin: 0}
+        .review { border: 1px solid #ddd; padding: 10px; border-radius: 8px; background-color: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); margin-bottom: 20px; }
+        .review-author { font-weight: bold; margin-bottom: 5px; }
+        .review-content { margin-bottom: 10px; }
+    </style>
 </head>
 <body>
-
     <header class="header-container">
-        <h1>Hackathon Website</h1>
+        <h1>GameTrackr</h1>
         <div class="navbar-container">
             <ul class="navbar-links">
                 <li><a href="index.html"><button class="link-btns">Home</button></a></li>
@@ -19,7 +24,7 @@
                 <li><a href="UserSignUp.html"><button class="link-btns" id="signupButton">Signup</button></a></li>
                 <li><a href="UserlogIn.html"><button id=loginButton class="link-btns">Login</button></a></li>
                 <li style="display: none;"><a href="#account"><button class="link-btns">Account</button></a></li>
-                <li><a href="AddGame.html"><button class="link-btns">Admin</button></a></li>
+                <li><a href="AddGame.html"><button style="display: none;" id="AddGame" class="link-btns">Admin</button></a></li>
             </ul>
         </div>
     </header>
@@ -34,28 +39,11 @@
 
             </ul>
         </div>
-        
         <div class="dashboard-container">
-            <div class="user-post-container">
-                <div class="user-profile">
-                    <img src="https://via.placeholder.com/100" alt="User Profile Picture" class="profile-pic">
-                    <div class="username">JohnDoe123</div>
-                <div class="review-content">
-                    <div class="review-rating">
-                        <span class="star filled">&#9733;</span>
-                <span class="star filled">&#9733;</span>
-                <span class="star filled">&#9733;</span>
-                <span class="star filled">&#9733;</span>
-                <span class="star">&#9734;</span>
-                    </div>
-                    <p class="review-text">This game was good</p>
-                <div class="game-info">
-                    <img src="https://via.placeholder.com/150" alt="Game Picture" class="game-pic">
-                <div class="game-title">Game Title</div>
-                </div>
-                </div>
-                </div>
-            </div>
+            <div class="review-container">
+                <h2>Friend Reviews</h2>
+                <div id="reviewsList"></div>
+            </div> 
         </div>
     </div>
 
@@ -63,27 +51,89 @@
         <p>&copy; 2024 Your Company Name. All rights reserved.</p>
     </footer>
 
-<script>
-    const loginButton = document.getElementById('loginButton');
-    const signupButton = document.getElementById('signupButton')
-    const authToken = sessionStorage.getItem('authToken');
-    const username = sessionStorage.getItem('username');
-    
-    if (authToken) {
-        loginButton.innerText = `Logout (${username})`;
-        signupButton.style.display = 'none';
-        loginButton.onclick = function() {
-            event.preventDefault();
-            sessionStorage.removeItem('authToken');
-            sessionStorage.removeItem('username');
-            location.reload();
+    <script>
+        const loginButton = document.getElementById('loginButton');
+        const signupButton = document.getElementById('signupButton');
+        const addGame = document.getElementById('AddGame');
+        const authToken = sessionStorage.getItem('authToken');
+        const username = sessionStorage.getItem('username');
+        const role = sessionStorage.getItem('role');
 
+        if (authToken) {
+            loginButton.innerText = `Logout (${username})`;
+            signupButton.style.display = 'none';
+            loginButton.onclick = function(event) {
+                event.preventDefault();
+                sessionStorage.removeItem('authToken');
+                sessionStorage.removeItem('username');
+                location.reload();
+            };
+            if (role === 'ADMIN') {
+                addGame.style.display = 'block';
+            }
+        } else {
+            loginButton.style.display = 'block';
+        }
+
+        // Fetch friend reviews from the backend and display them
+        const BASE_URL = 'http://localhost:8080';
+        const token = sessionStorage.getItem('authToken');
+
+        const fetchFriendReviews = () => {
+            fetch(`${BASE_URL}/reviews/friendReviews`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                displayReviews(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         };
-    } else {
-        loginButton.style.display = 'block';
-    }
-</script>
 
+        const displayReviews = (reviews) => {
+            const reviewsList = document.getElementById('reviewsList');
+            reviewsList.innerHTML = '';
+            reviews.forEach(review => {
+                const reviewDiv = document.createElement('div');
+                reviewDiv.classList.add('review');
 
-</body>
-</html>
+                const author = document.createElement('div');
+                author.classList.add('review-author');
+                author.textContent = `Author: ${review.user.userName}`;
+                reviewDiv.appendChild(author);
+
+                const game = document.createElement('div');
+                game.classList.add('game-title');
+                game.textContent = `Game Title: ${review.game.title}`;
+                reviewDiv.appendChild(game);
+
+                const gameImage = document.createElement('img');
+                gameImage.src = `data:image/jpeg;base64,${review.game.image}`;
+                gameImage.classList.add('game-image');
+                gameImage.style.width = '100px';  // Adjust the width as needed
+                gameImage.style.height = 'auto';  // Maintain aspect ratio
+                reviewDiv.appendChild(gameImage);
+
+                const content = document.createElement('div');
+                content.classList.add('review-content');
+                content.textContent = `Review: ${review.description}`;
+                reviewDiv.appendChild(content);
+
+                const rating = document.createElement('div');
+                rating.classList.add('review-rating');
+                rating.textContent = `Stars: ${review.stars}`;
+                reviewDiv.appendChild(rating);
+
+                reviewsList.appendChild(reviewDiv);
+            });
+        };
+
+        fetchFriendReviews();
+    </script>

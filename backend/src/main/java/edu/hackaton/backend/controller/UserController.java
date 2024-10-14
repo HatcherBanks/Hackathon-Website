@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.hackaton.backend.model.Game;
 import edu.hackaton.backend.model.User;
 import edu.hackaton.backend.service.UserService;
 
@@ -29,6 +30,11 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @DeleteMapping("/deleteUser")
+    public void deleteUser(Authentication auth) {
+        userService.deleteUser(auth.getName());
+    }
+
     @GetMapping("/getUserByUserName/{userName}")
     public User getUserByUserName(@PathVariable String userName) {
         return userService.getUserByUserName(userName);
@@ -37,6 +43,11 @@ public class UserController {
     @GetMapping("/getUserByEmail")
     public Optional<User> getUserByEmail(Authentication auth){
         return userService.findUserByEmail(auth.getName());
+    }
+
+    @GetMapping("/getGamesWantToPlay")
+    public Set<Game> getGamesWantToPlay(Authentication auth){
+        return userService.getGamesWantToPlay(auth.getName());
     }
 
     @PostMapping("/addGameToWantToPlay/{gameId}")
@@ -49,6 +60,11 @@ public class UserController {
         return userService.removeFromWantToPlay(gameId, auth.getName());
     }
 
+    @GetMapping("/getGamesCurrentlyPlaying")
+    public Set<Game> getGamesCurrentlyPlaying(Authentication auth){
+        return userService.getGamesCurrentlyPlaying(auth.getName());
+    }
+
     @PostMapping("/addGameToCurentlyPlaying/{gameId}")
     public User addGameToCurentlyPlaying(@PathVariable UUID gameId, Authentication auth){
         return userService.addToCurrentlyPlaying(gameId, auth.getName());
@@ -57,6 +73,11 @@ public class UserController {
     @DeleteMapping("/removeGameFromCurrentlyPlaying/{gameId}")
     public User removeGameFromCurrentlyPlaying(@PathVariable UUID gameId, Authentication auth){
         return userService.removeFromCurrentlyPlaying(gameId, auth.getName());
+    }
+
+    @GetMapping("/getGamesCompleted")
+    public Set<Game> getGamesCompleted(Authentication auth){
+        return userService.getGamesCompleted(auth.getName());
     }
 
     @PostMapping("/addGameToCompleted/{gameId}")
@@ -82,5 +103,10 @@ public class UserController {
     @DeleteMapping("/removeFriend/{friendId}")
     public User removeFriend(@PathVariable UUID friendId, Authentication auth){
         return userService.removeFriend(friendId, auth.getName());
+    }
+
+    @GetMapping("/getAllGames")
+    public Set<Game> getAllGames(Authentication auth){
+        return userService.getAllGames(auth.getName());
     }
 }
